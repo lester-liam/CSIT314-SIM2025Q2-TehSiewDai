@@ -1,24 +1,22 @@
 <?php
 require_once('Database.php');
 
-class UserProfile {
+class ServiceCategory {
     private $id;
-    private $role; 
-    private $description;
-    private $isSuspend;
+    private $serviceName;
+    private $serviceCategory;
 
     // Constructor Class
     public function __construct() {
         $this->id = null;
-        $this->role = null;
-        $this->isSuspend = null;
-        $this->description = null;
+        $this->serviceName = null;
+        $this->serviceCategory = null;
     }  
 
     // CRUD Operations //
 
-    //  Create User Profile
-    public function createUserProfile($role, $description) {
+    //  Create Service
+    public function createUserProfile($serviceName, $serviceCategory) {
         
         // New DB Conn
         $db_handle = new Database();
@@ -26,9 +24,9 @@ class UserProfile {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("INSERT INTO `UserProfile` (`role`, `description`, `isSuspend`) VALUES (:role, :description, 0)");
-            $stmt->bindParam(':role', $role);
-            $stmt->bindParam(':description', $description);
+            $stmt = $db_conn->prepare("INSERT INTO `ServiceCategory` (`serviceName`, `serviceCategory`) VALUES (:serviceName, :serviceCategory)");
+            $stmt->bindParam(':serviceName', $serviceName);
+            $stmt->bindParam(':serviceCategory', $serviceCategory);
             $execResult = $stmt->execute();
             
             unset($db_handle); // Delete DB Conn
@@ -44,12 +42,11 @@ class UserProfile {
             unset($db_handle);
             return FALSE;
         }
-
         
     }
 
-    //  Read UserProfile
-    public function readUserProfile($id) {
+    //  Read Service Category
+    public function readServiceCategory($id) {
         
         // New DB Conn
         $db_handle = new Database();
@@ -57,7 +54,7 @@ class UserProfile {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("SELECT * FROM `UserProfile` WHERE `id` = :id");
+            $stmt = $db_conn->prepare("SELECT * FROM `ServiceCategory` WHERE `id` = :id");
             $stmt->bindParam(':id', $id);
             $execResult = $stmt->execute();
             
@@ -78,8 +75,8 @@ class UserProfile {
         
     }
 
-    //  Read All UserProfile
-    public function readAllUserProfile() {
+    //  Read All Services
+    public function readAllServiceCategory() {
     
         // New DB Conn
         $db_handle = new Database();
@@ -87,7 +84,7 @@ class UserProfile {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("SELECT * FROM `UserProfile`");
+            $stmt = $db_conn->prepare("SELECT * FROM `ServiceCategory`");
             $execResult = $stmt->execute();
             unset($db_handle); // Delete DB Conn
 
@@ -106,8 +103,8 @@ class UserProfile {
         
     }
 
-    // Update UserProfile
-    public function updateUserProfile($id, $role, $description, $isSuspend) {
+    // Update Service Category
+    public function updateServiceCategory($id, $serviceName, $serviceCategory) {
 
         // New DB Conn
         $db_handle = new Database();
@@ -115,9 +112,10 @@ class UserProfile {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("UPDATE `UserProfile` SET `role` = :role, `description` = :description, `isSuspend` = $isSuspend WHERE `id` = $id");
-            $stmt->bindParam(':role', $role);
-            $stmt->bindParam(':description', $description);
+            $stmt = $db_conn->prepare("UPDATE `ServiceCategory` SET `serviceName` = :serviceName, `serviceCategory` = :serviceCategory WHERE `id` = $id");
+            $stmt->bindParam(':serviceName', $serviceName);
+            $stmt->bindParam(':serviceCategory', $serviceCategory);
+            $execResult = $stmt->execute();
             
             $execResult = $stmt->execute();
     
@@ -130,14 +128,14 @@ class UserProfile {
                 return FALSE;
             }
         } catch (PDOException $e) {
-            error_log("Database insert failed: " . $e->getMessage());
+            error_log("Database update failed: " . $e->getMessage());
             unset($db_handle);
             return FALSE;
         }
     }
 
-    // Search User Profile
-    public function searchUserProfile($searchTerm) {
+    // Search Services
+    public function searchServiceCategory($searchTerm) {
 
         // New DB Conn
         $db_handle = new Database();
@@ -146,7 +144,7 @@ class UserProfile {
         // SQL Statement
         try {
             $searchTerm = "%" . $searchTerm . "%";
-            $stmt = $db_conn->prepare("SELECT * FROM `UserProfile` WHERE `role` LIKE :term OR `description` LIKE :term");
+            $stmt = $db_conn->prepare("SELECT * FROM `ServiceCategory` WHERE `serviceName` LIKE :term OR `serviceCategory` LIKE :term");
             $stmt->bindParam(':term', $searchTerm);
             $execResult = $stmt->execute();
             unset($db_handle); // Delete DB Conn

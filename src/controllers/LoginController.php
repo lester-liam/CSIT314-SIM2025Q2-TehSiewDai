@@ -1,48 +1,64 @@
 <?php
 session_start();
 
-include '../entity/User.php';
+require_once '../entity/UserAccount.php';
 
 class LoginController {
-    private $userProfile;
-    private $username;
-    private $password;
-
-    // Constructor to initialize the class with user data
-    public function __construct($userProfile, $username, $password) {
-        
-        $this->userProfile = $userProfile;
-        $this->username = $username;
-        $this->password = md5($password);
     
+    private $userAccount;
+
+    // Constructor Class
+    public function __construct() {
+        $this->userAccount = new UserAccount();
     }
 
-    // Method to authenticate user and set session
-    public function login() {
-        // Call the User class' login method to authenticate
-        $userClass = new User($this->username, null, $this->password, null, null, $this->userProfile, null);
-        $user = $userClass->auth();
-        return $user;
+    // Authentication Method
+    // Login Method Calls UserAccount::auth() Method
+    public function login($username, $password, $userProfile) {
+        return $this->userAccount->login($username, $password, $userProfile);
     }
 }
 
-// Executes when Login Form is Submitted
+// `login.php` Script
+// Executes when Login Form is Submitted (POST Request)
 if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['userProfile'])) {
     
-    // Create a new LoginController instance and authenticate
-    $loginControl = new LoginController($_POST['userProfile'], $_POST['username'], $_POST['password']);
-    $user = $loginControl->login();
+    // Instantiate New Login Controller & Authenticate User
+    $loginControl = new LoginController();
+    $user = $loginControl->login($_POST['username'], $_POST['password'], $_POST['userProfile']);
 
-    // If authentication fails, redirect back to the login page with an error
-    if ($user['id'] == -1) {
-        header("Location: ../login.php?error=Invalid credentials");
+    // Login Fail:
+    //   - Null User: Display Invalid Credentials Error
+    //   - Suspended User/User Profile: Display User Suspended Error
+    // Login Success:
+    //   - Display Corresponding User Profile Page
+    if (is_null($user)) {
+        header("Location: ../login.php?error=Invalid Credentials.");
+        exit();
+    
+    } elseif ($user['isSuspend'] == 1) {
+        header("Location: ../login.php?error=User Suspended");
         exit();
     } else {
+        
+        // Update Session Variables
         $_SESSION['id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['userProfile'] = $user['userProfile'];
-        header("Location: ../dashboard.php");
-        exit();
+        
+        if ($_SESSION['userProfile'] == "User Admin") {
+            header("Location: ../viewUserProfile.php");
+            exit();
+        } elseif ($_SESSION['userProfile'] == "Platform Management") {
+            header("Location: ../platformManagementView.php");
+            exit();
+        } elseif ($_SESSION['userProfile'] == "Cleaner") {
+            header("Location: ../cleanerView.php");
+            exit();
+        } else {
+            header("Location: ../homeownerView.php");
+            exit();
+        }
     }
 }
 ?>
