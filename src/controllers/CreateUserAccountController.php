@@ -9,10 +9,11 @@ class CreateUserAccountController {
         $this->userAccount = new UserAccount();
     }
 
-    // Returns Success/Fail
+    // Create User Account, Returns a Boolean Value (Success/Fail)
     public function createUserAccount($username, $password, $fullName, $email, $phone, $userProfile) {
         return $this->userAccount->createUserAccount($username, $password, $fullName, $email, $phone, $userProfile);
     }
+    
 }
 
 // `createUserAccount.php` Script
@@ -26,10 +27,11 @@ if (
     isset($_POST['userProfile'])
 ) {
     
-    // Instantiate New Login Controller & Authenticate User
+    // Instantiate New Controller & Create Account
     $controller = new CreateUserAccountController();
     $status = $controller->createUserAccount($_POST['username'], $_POST['password'], $_POST['fullName'], $_POST['email'], $_POST['phone'], $_POST['userProfile']);
 
+    // Display Success or Fail
     if ($status) {
         header("Location: ../createUserAccount.php?status=1");
         exit();
@@ -37,6 +39,7 @@ if (
         header("Location: ../createUserAccount.php?status=0");
         exit();
     }       
+
 }
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 require_once "entity/UserAccount.php";
 
-class ViewUserAccountController {
+class ViewAllUserAccountController {
 
     private $userAccount;
 
@@ -9,11 +9,10 @@ class ViewUserAccountController {
         $this->userAccount = new UserAccount();
     }
 
-    // Returns One User Account
-    public function readUserAccount($id) {
-        return $this->userAccount->readUserAccount($id);
+    // Returns All User Account
+    public function readAllUserAccount() {
+        return $this->userAccount->readAllUserAccount();
     }
-
 }
 
 ?>

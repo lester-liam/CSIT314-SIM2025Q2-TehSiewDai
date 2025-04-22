@@ -1,32 +1,35 @@
 <?php
 
-// Start the session (if not already started)
+// Starts Session
 session_start();
 
-// Include the controller
+// Include Controller
 require_once 'controllers/ViewUserAccountController.php';
 
-// Ensure User is Logged In
+// Check if User is Logged In, Else Return Login Page
 if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
   header("Location: login.php");
   exit();
 }
 
-// Ensure User is Admin
+// Check if User is Admin, Else Return Login Page
 if ($_SESSION['userProfile'] != "User Admin") {
   header("Location: login.php");
   exit();
 }
 
+// Check if ID is Set, Otherwise Return View All User Account Page
 if (!isset($_GET['id'])) {
   header("Location: viewUserAccount.php");
   exit();
 } else {
+
   // Instantiate the controller
   $controller = new ViewUserAccountController();
 
   // Get all user accounts
   $ua = $controller->readUserAccount($_GET['id']);
+  
 }
 
 
@@ -38,197 +41,7 @@ if (!isset($_GET['id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Update User Account</title>
-
-  <style>
-    * {
-      margin: 0px;
-      padding: 0px;
-      box-sizing: border-box;
-      font-family: 'Inter', 'Segoe UI', sans-serif;
-    }
-
-    body {
-      height: 100vh;
-      background-color: rgb(233, 239, 236);
-    }
-
-    .navbar {
-      width: 100%;
-      height: 60px;
-      background-color: rgb(22, 66, 60);
-      padding: 15px 105px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .navbar ul {
-      list-style: none;
-      gap: 40px;
-      display: flex;
-      margin-left: 20px;
-    }
-
-    .navbar ul li {
-      position: relative;
-    }
-
-    .navbar ul li a {
-      color: rgb(252, 252, 252);
-      text-decoration: none;
-      font-size: 18px;
-      transition: 0.2s ease;
-    }
-
-    .navbar ul li a::before {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      left: 0px;
-      bottom: -5px;
-      background: rgb(255, 255, 255);
-      transition: 0.2s ease;
-    }
-
-    .navbar ul li a:hover {
-      color: rgb(255, 255, 255);
-    }
-
-    .navbar ul li a:hover::before {
-      width: 100%;
-    }
-
-    .logout-button button {
-      font-size: 18px;
-      padding: 7px 15px;
-      background-color: rgb(52, 91, 76);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .logout-button button:hover {
-      background-color: rgb(106, 156, 137);
-    }
-
-    .form-container {
-      position: relative;
-      width: 540px;
-      height: auto;
-      max-width: 600px;
-      margin: auto;
-      margin-top: 180px;
-      background-color: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-      text-align: center;
-      color: rgb(22, 66, 60);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      font-weight: bold;
-      color: rgb(22, 66, 60);
-    }
-
-    input[type="text"],
-    input[type="password"],
-    input[type="email"],
-    input[type="tel"] {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 6px;
-    }
-
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 6px;
-      font-size: 1em; /* Adjust font size as needed */
-      color: #333; /* Adjust text color */
-      appearance: none; /* Remove default arrow */
-    }
-
-    .form-group select option {
-      padding: 8px;
-      font-size: 1em;
-      color: #333;
-      background-color: white; /* Ensure white background for options */
-    }
-
-    .form-group select:focus {
-      border-color: rgb(22, 66, 60);
-      outline: none; /* Remove default focus outline */
-      box-shadow: 0 0 5px rgba(22, 66, 60, 0.5); /* Add a subtle focus shadow */
-    }
-
-    input[readonly] {
-      background-color: #e9ecef;
-      color: #6c757d;
-      cursor: not-allowed; 
-    }
-
-    .radio-group {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      accent-color:  rgb(22, 66, 60);
-    }
-
-    .submit-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .submit-button {
-      flex: 1;
-      background-color: rgb(22, 66, 60);
-      color: white;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .submit-button:hover {
-      background-color: rgb(106, 156, 137);
-    }
-
-    .back-button {
-      flex: 1;
-      background-color: white;
-      color: rgb(22, 66, 60);
-      border: 2px solid rgb(22, 66, 60);
-      border-radius: 6px;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s ease;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    .back-button:hover {
-      background-color: rgb(233, 239, 236);
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -249,11 +62,11 @@ if (!isset($_GET['id'])) {
     <br>
     <form action="controllers/UpdateUserAccountController.php" method="post">
       <?php if (isset($_GET['status']) && $_GET['status'] == 0) { ?>
-        <div class="alert alert-danger" role="alert">
+        <div class="alert-danger" role="alert">
           <strong>Update User Account Failed: Try a Different Username</strong>
         </div>
       <?php } else if (isset($_GET['status']) && $_GET['status'] == 1) { ?>
-        <div class="alert alert-success" role="alert">
+        <div class="alert-success" role="alert">
           <strong>Successfully Updated User Account</strong>
         </div>
       <?php } ?>
@@ -295,35 +108,26 @@ if (!isset($_GET['id'])) {
       
       <div class="form-group">
         <label for="userProfile">Role:</label>
-        <select class="form-select" id="floatingUserProfile" name="userProfile">
-          <option value="Homeowner" <?php if ($ua['userProfile'] == "Homeowner") { echo htmlspecialchars("selected"); } ?>>Homeowner</option>
-          <option value="Cleaner" <?php if ($ua['userProfile'] == "Cleaner") { echo htmlspecialchars("selected"); } ?>>Cleaner</option>
-          <option value="Platform Management" <?php if ($ua['userProfile'] == "Platform Management") { echo htmlspecialchars("selected"); } ?>>Platform Management</option>
-          <option value="User Admin" <?php if ($ua['userProfile'] == "User Admin") { echo htmlspecialchars("selected"); } ?>>User Admin</option>
-        </select>
+        <input type="text" id="userProfile" name="userProfile" value="<?php echo htmlspecialchars($ua['userProfile']); ?>" readonly>
       </div>
 
       <?php if ($ua['isSuspend'] == 1) { ?>
       
-        <div class="form-group radio-group">
-        <label>Suspended:</label>
-        <label><input type="radio" name="isSuspend" value="1" checked>&nbspYES</label>
-        <label><input type="radio" name="isSuspend" value="0">&nbspNO</label>
+        <div class="form-group">
+          <button type="button" class="suspend-button-disabled" disabled>Suspend</button>
         </div>
-    
+      
       <?php } else { ?>
       
-        <div class="form-group radio-group">
-        <label>Suspended:</label>
-        <label><input type="radio" name="isSuspend" value="1">&nbspYES</label>
-        <label><input type="radio" name="isSuspend" value="0" checked>&nbspNO</label>
+        <div class="form-group">
+          <button type="button" class="suspend-button" onclick="suspendButtonClicked()">Suspend</button>
         </div>
 
       <?php } ?>
 
       <div class="submit-row">
         <button type="button" onclick='window.location.href="viewUserAccount.php"' class="back-button">Back</button>
-        <button type="submit" id="submit-button" class="submit-button">Create</button>
+        <button type="submit" id="submit-button" class="submit-button">Update</button>
       </div>
     </form>
   </div>
@@ -332,6 +136,13 @@ if (!isset($_GET['id'])) {
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script>
+
+    function suspendButtonClicked() {
+      if (confirm("Confirm Suspend User Account?") == true) {
+        window.location.href='./controllers/SuspendUserAccountController.php?id=<?php echo htmlspecialchars($_GET['id']); ?>'
+      }
+    }
+
     const form = document.querySelector("form");
 
     document.getElementById("submit-button").addEventListener("click", function (event) {
@@ -400,7 +211,9 @@ if (!isset($_GET['id'])) {
         }
 
         if (isValid) {
-          form.submit();
+          if (confirm("Confirm Update User Account?") == true) {
+            form.submit();
+          }
         }
     });
     </script>

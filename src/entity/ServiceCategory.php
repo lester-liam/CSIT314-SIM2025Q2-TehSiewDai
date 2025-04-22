@@ -3,7 +3,7 @@ require_once('Database.php');
 
 class ServiceCategory {
     private $id;
-    private $serviceName;
+    private $serviceName; 
     private $serviceCategory;
 
     // Constructor Class
@@ -15,8 +15,14 @@ class ServiceCategory {
 
     // CRUD Operations //
 
-    //  Create Service
-    public function createUserProfile($serviceName, $serviceCategory) {
+    //  Create ServiceCategory
+    public function createServiceCategory($serviceName, $serviceCategory) {
+    /*  Inserts New User Profile:
+        $serviceName: string
+        $serviceCategory: string
+
+        Returns: Boolean 
+    */
         
         // New DB Conn
         $db_handle = new Database();
@@ -42,12 +48,18 @@ class ServiceCategory {
             unset($db_handle);
             return FALSE;
         }
+
         
     }
 
-    //  Read Service Category
+    //  Read ServiceCategory
     public function readServiceCategory($id) {
-        
+    /*  Select Service Category By ID
+        $id: int
+
+    Returns: Single ServiceCategory 
+    */
+
         // New DB Conn
         $db_handle = new Database();
         $db_conn = $db_handle->getConnection();
@@ -75,9 +87,12 @@ class ServiceCategory {
         
     }
 
-    //  Read All Services
     public function readAllServiceCategory() {
-    
+    /*  Select All ServiceCategory
+
+        Returns: Array of ServiceCategory
+    */
+
         // New DB Conn
         $db_handle = new Database();
         $db_conn = $db_handle->getConnection();
@@ -103,8 +118,15 @@ class ServiceCategory {
         
     }
 
-    // Update Service Category
     public function updateServiceCategory($id, $serviceName, $serviceCategory) {
+    /*  Updates a User Profile:
+
+        $id: int
+        $serviceName: string
+        $serviceCategory: string
+
+        Returns: Boolean
+    */
 
         // New DB Conn
         $db_handle = new Database();
@@ -115,7 +137,6 @@ class ServiceCategory {
             $stmt = $db_conn->prepare("UPDATE `ServiceCategory` SET `serviceName` = :serviceName, `serviceCategory` = :serviceCategory WHERE `id` = $id");
             $stmt->bindParam(':serviceName', $serviceName);
             $stmt->bindParam(':serviceCategory', $serviceCategory);
-            $execResult = $stmt->execute();
             
             $execResult = $stmt->execute();
     
@@ -128,14 +149,48 @@ class ServiceCategory {
                 return FALSE;
             }
         } catch (PDOException $e) {
-            error_log("Database update failed: " . $e->getMessage());
+            error_log("Database insert failed: " . $e->getMessage());
+            unset($db_handle);
+            return FALSE;
+        }
+    }
+    
+    public function deleteServiceCategory($id) {
+    /*  Deletes a Service Category:
+        $id: int
+        Returns: Boolean
+    */
+        // New DB Conn
+        $db_handle = new Database();
+        $db_conn = $db_handle->getConnection();
+
+        // SQL TryCatch Statement
+        try {
+            $stmt = $db_conn->prepare("DELETE FROM `ServiceCategory` WHERE `id` = $id");
+            
+            $execResult = $stmt->execute();
+    
+            unset($db_handle); // Delete DB Conn
+
+            // Insert Success ?
+            if ($execResult) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        } catch (PDOException $e) {
+            error_log("Database delete failed: " . $e->getMessage());
             unset($db_handle);
             return FALSE;
         }
     }
 
-    // Search Services
+    // Search Service Category
     public function searchServiceCategory($searchTerm) {
+    /*  Searches for ServiceCategory:
+        $searchTerm: string
+        Returns: Array of ServiceCategory
+    */
 
         // New DB Conn
         $db_handle = new Database();

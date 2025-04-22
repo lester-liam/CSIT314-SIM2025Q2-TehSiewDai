@@ -17,6 +17,7 @@ class LoginController {
     public function login($username, $password, $userProfile) {
         return $this->userAccount->login($username, $password, $userProfile);
     }
+    
 }
 
 // `login.php` Script
@@ -33,12 +34,16 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['user
     // Login Success:
     //   - Display Corresponding User Profile Page
     if (is_null($user)) {
+
         header("Location: ../login.php?error=Invalid Credentials.");
         exit();
+
     
     } elseif ($user['isSuspend'] == 1) {
+
         header("Location: ../login.php?error=User Suspended");
         exit();
+
     } else {
         
         // Update Session Variables
@@ -59,6 +64,8 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['user
             header("Location: ../homeownerView.php");
             exit();
         }
+
     }
 }
+
 ?>

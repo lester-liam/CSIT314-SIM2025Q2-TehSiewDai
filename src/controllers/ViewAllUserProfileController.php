@@ -1,7 +1,7 @@
 <?php
 require_once "entity/UserProfile.php";
 
-class ViewUserProfileController {
+class ViewAllUserProfileController {
     
     private $userProfile;
 
@@ -9,11 +9,10 @@ class ViewUserProfileController {
         $this->userProfile = new UserProfile();
     }
 
-    // Returns One User Profile
-    public function readUserProfile($id) {
-        return $this->userProfile->readUserProfile($id);
+    // Returns All User Profiles
+    public function readAllUserProfile() {
+        return $this->userProfile->readAllUserProfile();
     }
-    
 }
 
 ?>

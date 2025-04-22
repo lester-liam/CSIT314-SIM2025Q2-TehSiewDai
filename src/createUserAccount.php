@@ -24,191 +24,7 @@ if ($_SESSION['userProfile'] != "User Admin") {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create User Account</title>
-
-  <style>
-    * {
-      margin: 0px;
-      padding: 0px;
-      box-sizing: border-box;
-      font-family: 'Inter', 'Segoe UI', sans-serif;
-    }
-
-    body {
-      height: 100vh;
-      background-color: rgb(233, 239, 236);
-    }
-
-    .navbar {
-      width: 100%;
-      height: 60px;
-      background-color: rgb(22, 66, 60);
-      padding: 15px 105px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .navbar ul {
-      list-style: none;
-      gap: 40px;
-      display: flex;
-      margin-left: 20px;
-    }
-
-    .navbar ul li {
-      position: relative;
-    }
-
-    .navbar ul li a {
-      color: rgb(252, 252, 252);
-      text-decoration: none;
-      font-size: 18px;
-      transition: 0.2s ease;
-    }
-
-    .navbar ul li a::before {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      left: 0px;
-      bottom: -5px;
-      background: rgb(255, 255, 255);
-      transition: 0.2s ease;
-    }
-
-    .navbar ul li a:hover {
-      color: rgb(255, 255, 255);
-    }
-
-    .navbar ul li a:hover::before {
-      width: 100%;
-    }
-
-    .logout-button button {
-      font-size: 18px;
-      padding: 7px 15px;
-      background-color: rgb(52, 91, 76);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .logout-button button:hover {
-      background-color: rgb(106, 156, 137);
-    }
-
-    .form-container {
-      position: relative;
-      width: 540px;
-      height: auto;
-      max-width: 600px;
-      margin: auto;
-      margin-top: 180px;
-      background-color: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-      text-align: center;
-      color: rgb(22, 66, 60);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      font-weight: bold;
-      color: rgb(22, 66, 60);
-    }
-
-    input[type="text"],
-    input[type="password"],
-    input[type="email"],
-    input[type="tel"] {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 6px;
-    }
-
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 6px;
-      font-size: 1em; /* Adjust font size as needed */
-      color: #333; /* Adjust text color */
-      appearance: none; /* Remove default arrow */
-    }
-
-    .form-group select option {
-      padding: 8px;
-      font-size: 1em;
-      color: #333;
-      background-color: white; /* Ensure white background for options */
-    }
-
-    .form-group select:focus {
-      border-color: rgb(22, 66, 60);
-      outline: none; /* Remove default focus outline */
-      box-shadow: 0 0 5px rgba(22, 66, 60, 0.5); /* Add a subtle focus shadow */
-    }
-
-    .radio-group {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      accent-color:  rgb(22, 66, 60);
-    }
-
-    .submit-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .submit-button {
-      flex: 1;
-      background-color: rgb(22, 66, 60);
-      color: white;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .submit-button:hover {
-      background-color: rgb(106, 156, 137);
-    }
-
-    .back-button {
-      flex: 1;
-      background-color: white;
-      color: rgb(22, 66, 60);
-      border: 2px solid rgb(22, 66, 60);
-      border-radius: 6px;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s ease;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    .back-button:hover {
-      background-color: rgb(233, 239, 236);
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 
 </head>
 
@@ -230,11 +46,11 @@ if ($_SESSION['userProfile'] != "User Admin") {
     <br>
     <form action="controllers/CreateUserAccountController.php" method="post">
       <?php if (isset($_GET['status']) && $_GET['status'] == 0) { ?>
-        <div class="alert alert-danger" role="alert">
+        <div class="alert-danger" role="alert">
           <strong>Create User Account Failed: Try a Different Username</strong>
         </div>
       <?php } else if (isset($_GET['status']) && $_GET['status'] == 1) { ?>
-        <div class="alert alert-success" role="alert">
+        <div class="alert-success" role="alert">
           <strong>Successfully Created User Account</strong>
         </div>
       <?php } ?>
@@ -360,8 +176,10 @@ if ($_SESSION['userProfile'] != "User Admin") {
         }
 
         if (isValid) {
-          form.submit();
+          if (confirm("Confirm Create User Account?") == true) {
+            form.submit();
         }
+      }
     });
   </script>
 </body>

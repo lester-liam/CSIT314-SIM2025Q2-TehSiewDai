@@ -19,6 +19,12 @@ class UserProfile {
 
     //  Create User Profile
     public function createUserProfile($role, $description) {
+    /*  Inserts New User Profile:
+        $role: string
+        $description: string
+
+        Returns: Boolean 
+    */
         
         // New DB Conn
         $db_handle = new Database();
@@ -50,7 +56,12 @@ class UserProfile {
 
     //  Read UserProfile
     public function readUserProfile($id) {
-        
+    /*  Select User Profile By ID
+        $id: int
+
+    Returns: Single UserProfile 
+    */
+
         // New DB Conn
         $db_handle = new Database();
         $db_conn = $db_handle->getConnection();
@@ -78,9 +89,12 @@ class UserProfile {
         
     }
 
-    //  Read All UserProfile
     public function readAllUserProfile() {
-    
+    /*  Select All User Profile
+
+        Returns: Array of User Profiles
+    */
+
         // New DB Conn
         $db_handle = new Database();
         $db_conn = $db_handle->getConnection();
@@ -106,8 +120,15 @@ class UserProfile {
         
     }
 
-    // Update UserProfile
-    public function updateUserProfile($id, $role, $description, $isSuspend) {
+    public function updateUserProfile($id, $role, $description) {
+    /*  Updates a User Profile:
+
+        $id: int
+        $role: string
+        $description: string
+
+        Returns: Boolean
+    */
 
         // New DB Conn
         $db_handle = new Database();
@@ -115,7 +136,7 @@ class UserProfile {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("UPDATE `UserProfile` SET `role` = :role, `description` = :description, `isSuspend` = $isSuspend WHERE `id` = $id");
+            $stmt = $db_conn->prepare("UPDATE `UserProfile` SET `role` = :role, `description` = :description WHERE `id` = $id");
             $stmt->bindParam(':role', $role);
             $stmt->bindParam(':description', $description);
             
@@ -135,9 +156,43 @@ class UserProfile {
             return FALSE;
         }
     }
+    
+    public function suspendUserProfile($id) {
+    /*  Suspends a User Profile:
+        $id: int
+        Returns: Boolean
+    */
+        // New DB Conn
+        $db_handle = new Database();
+        $db_conn = $db_handle->getConnection();
+
+        // SQL TryCatch Statement
+        try {
+            $stmt = $db_conn->prepare("UPDATE `UserProfile` SET `isSuspend` = 1 WHERE `id` = $id");
+            
+            $execResult = $stmt->execute();
+    
+            unset($db_handle); // Delete DB Conn
+
+            // Insert Success ?
+            if ($execResult) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        } catch (PDOException $e) {
+            error_log("Database update failed: " . $e->getMessage());
+            unset($db_handle);
+            return FALSE;
+        }
+    }
 
     // Search User Profile
     public function searchUserProfile($searchTerm) {
+    /*  Searches for User Profile(s):
+        $searchTerm: string
+        Returns: Array of UserProfile
+    */
 
         // New DB Conn
         $db_handle = new Database();

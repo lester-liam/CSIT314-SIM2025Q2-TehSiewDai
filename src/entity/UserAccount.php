@@ -11,7 +11,7 @@ class UserAccount {
     private $userProfile;
     private $isSuspend;
 
-    // Constructor Class
+    // Constructor
     public function __construct() {
         $this->id = null;
         $this->username = null;
@@ -25,19 +25,28 @@ class UserAccount {
 
     // CRUD Operations //
 
-    //  Create User
     public function createUserAccount($username, $password, $fullName, $email, $phone, $userProfile) {
-        
+    /*  Inserts New User Account:
+        $username: string
+        $password: string
+        $fullName: string
+        $email: string
+        $phone: string
+        $userProfile: string 
+
+        Returns: Boolean 
+    */
+
         // New DB Conn
         $db_handle = new Database();
         $db_conn = $db_handle->getConnection();
         
-
         // Hash Password with MD5
         $passwd = md5($password);
 
         // SQL TryCatch Statement
         try {
+            
             $stmt = $db_conn->prepare("INSERT INTO `UserAccount` VALUES (null, :username, :password, :fullName, :email, :phone, :userProfile, 0)");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $passwd);
@@ -55,6 +64,7 @@ class UserAccount {
             } else {
                 return FALSE;
             }
+
         } catch (PDOException $e) {
             error_log("Database insert failed: " . $e->getMessage());
             unset($db_handle);
@@ -63,8 +73,12 @@ class UserAccount {
         
     }
 
-    //  Read User
     public function readUserAccount($id) {
+    /*  Select User Account By ID
+        $id: int
+
+        Returns: Single UserAccount
+    */
         
         // New DB Conn
         $db_handle = new Database();
@@ -93,9 +107,12 @@ class UserAccount {
         
     }
 
-    //  Read All User
     public function readAllUserAccount() {
-    
+    /*  Select All User Account
+
+        Returns: Array of User Accounts
+    */
+
         // New DB Conn
         $db_handle = new Database();
         $db_conn = $db_handle->getConnection();
@@ -121,20 +138,33 @@ class UserAccount {
         
     }
 
-    // Update User
-    public function updateUserAccount($id, $username, $password, $fullName, $email, $phone, $userProfile, $isSuspend) {
+    public function updateUserAccount($id, $username, $password, $fullName, $email, $phone, $userProfile) {
+    /*  Updates a User Account:
+        If password is NULL, attribute will not be updated 
+        Otherwise, it will be hashed (MD5) and updated
+
+        $id: int
+        $username: string
+        $password: string or NULL
+        $fullName: string
+        $email: string
+        $phone: string
+        $userProfile: string 
+
+        Returns: Boolean
+    */
 
         // New DB Conn
         $db_handle = new Database();
         $db_conn = $db_handle->getConnection();
 
-
         // SQL TryCatch Statement
         try {
-            $sql = "UPDATE `UserAccount` SET `username` = :username, `fullName` = :fullName, `email` = :email, `phone` = :phone, `userProfile` = :userProfile, `isSuspend` = :isSuspend WHERE `id` = :id";
-
+            $sql = "UPDATE `UserAccount` SET `username` = :username, `fullName` = :fullName, `email` = :email, `phone` = :phone, `userProfile` = :userProfile WHERE `id` = :id";
+            
+            // Checks if Password is NULL
             if (!is_null($password)) {
-                $sql = "UPDATE `UserAccount` SET `username` = :username, `password` = :password, `fullName` = :fullName, `email` = :email, `phone` = :phone, `userProfile` = :userProfile, `isSuspend` = :isSuspend WHERE `id` = :id";
+                $sql = "UPDATE `UserAccount` SET `username` = :username, `password` = :password, `fullName` = :fullName, `email` = :email, `phone` = :phone, `userProfile` = :userProfile WHERE `id` = :id";
             }
 
             $stmt = $db_conn->prepare($sql);
@@ -145,10 +175,9 @@ class UserAccount {
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':phone', $phone);
             $stmt->bindParam(':userProfile', $userProfile);
-            $stmt->bindParam(':isSuspend', $isSuspend);
 
             if (!is_null($password)) {
-                $passwd = md5($password);
+                $passwd = md5($password); # Hash Password
                 $stmt->bindParam(':password', $passwd);
             }
 
@@ -158,8 +187,6 @@ class UserAccount {
 
             // Update Success ?
             if ($execResult) {
-                error_log("Database Update Success");
-                error_log(print_r($execResult, true)); // Use print_r for better debugging
                 return TRUE;
             } else {
                 return FALSE;
@@ -172,8 +199,43 @@ class UserAccount {
         
     }
 
-    // Search User Account
+    public function suspendUserAccount($id) {
+    /*  Suspends a User Account:
+        $id: int
+        Returns: Boolean
+    */
+
+        // New DB Conn
+        $db_handle = new Database();
+        $db_conn = $db_handle->getConnection();
+
+        // SQL TryCatch Statement
+        try {
+            $stmt = $db_conn->prepare("UPDATE `UserAccount` SET `isSuspend` = 1 WHERE `id` = $id");
+            
+            $execResult = $stmt->execute();
+    
+            unset($db_handle); // Delete DB Conn
+
+            // Update Success ?
+            if ($execResult) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+
+        } catch (PDOException $e) {
+            error_log("Database update failed: " . $e->getMessage());
+            unset($db_handle);
+            return FALSE;
+        }
+    }
+
     public function searchUserAccount($searchTerm) {
+    /*  Searches for User Account(s):
+        $searchTerm: string
+        Returns: Array of UserAccounts
+    */
 
         // New DB Conn
         $db_handle = new Database();
@@ -199,8 +261,19 @@ class UserAccount {
         }
     }
 
-    // Authenticate User
+
     public function login($username, $password, $userProfile) {
+    /*  Login (Authenticate) UserAccount
+        Checks for UserAccount (UA) Exists, Authenticate Password,
+        Then Checks if UserProfile or UA  is Suspended
+
+        $username: string
+        $password: string
+        $userProfiel: string
+
+        Return: UserAccount or NULL
+    */
+
 
         // New DB Conn
         $db_handle = new Database();
@@ -251,4 +324,5 @@ class UserAccount {
         }
     }
 }
+
 ?>

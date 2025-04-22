@@ -9,7 +9,7 @@ class SearchUserAccountController {
         $this->userAccount = new UserAccount();
     }
 
-    // Search User Profile
+    // Search User Account, Return Array[0 to Many] of User Account
     public function searchUserAccount($searchTerm) {
         return $this->userAccount->searchUserAccount($searchTerm);
     }
