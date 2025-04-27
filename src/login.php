@@ -48,9 +48,4 @@
     </body>
     </html>
 <?php 
-} else {
-    // Redirect to the dashboard if logged in
-    header("Location: dashboard.php"); // You can change this to the correct page you want users to go after login
-    exit(); // Make sure to stop script execution after the redirect
 }
-?>

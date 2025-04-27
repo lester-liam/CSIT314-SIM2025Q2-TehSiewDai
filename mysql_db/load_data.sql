@@ -42,7 +42,8 @@ INSERT INTO UserProfile VALUES(2, "Platform Management", "For Service Categories
 INSERT INTO UserProfile VALUES(3, "Cleaner", "For cleaners to manage their services", 0);
 INSERT INTO UserProfile VALUES(4, "Homeowner", "For homeowners to access Cleaner Services.", 0);
 
-INSERT INTO UserAccount VALUES(1, 'u1', md5('u1'), 'User1', 'user1@example.com', '+65 4320-2034', 'User Admin', 0);
+INSERT INTO UserAccount VALUES(1, 'u1', md5('u1'), 'User1', 'user1@example.com', '43202034', 'User Admin', 0);
+INSERT INTO UserAccount VALUES(2, 'pm1', md5('pm1'), 'User2', 'user2@example.com', '98620160', 'Platform Management', 0);
 
 INSERT INTO ServiceCategory (id, serviceName, serviceCategory) VALUES
 (1, 'Window Cleaning', 'Residential Cleaning'),

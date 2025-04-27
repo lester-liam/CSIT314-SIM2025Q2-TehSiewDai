@@ -349,8 +349,8 @@ input[readonly] {
 
 .search-button:hover,
 .create-button:hover {
-background-color: rgb(106, 156, 137);
-transition: 0.2s ease;
+    background-color: rgb(22, 66, 60);
+    transition: 0.2s ease;
 }
 
 .view-button {
@@ -363,8 +363,24 @@ transition: 0.2s ease;
     cursor: pointer;
     transition: 0.2s ease;
     text-decoration:none;
-    }
+}
     
-    .view-button:hover {
+.view-button:hover {
     background-color: rgb(106, 156, 137);
+}
+
+.delete-button {
+    background-color: rgb(223, 45, 45);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    text-decoration:none;
+}
+    
+.delete-button:hover {
+    background-color: rgb(221, 101, 101);
 }

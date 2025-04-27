@@ -41,7 +41,7 @@ if (isset($_GET['id'])) {
     
 } else {
 
-    $id = (int) $_POST['id'];
+    $id = (int) $_GET['id'];
     header("Location: ../updateUserProfile.php?id=$id&status=0");
     exit();
 

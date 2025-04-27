@@ -107,7 +107,7 @@ if (isset($_GET['q'])) {
                 <?php if ($ua['isSuspend'] == 1) { echo 'YES'; } else { echo 'NO'; } ?>
               </td>
               <td>
-                <button onclick='window.location.href="updateUserAccount.php?id=<?php echo htmlspecialchars($ua["id"]); ?>"' class="view-button">View</button>
+                <button class="view-button" onclick='window.location.href="updateUserAccount.php?id=<?php echo htmlspecialchars($ua["id"]); ?>"'>View</button>
               </td>
           </tr>
       <?php endforeach; ?>

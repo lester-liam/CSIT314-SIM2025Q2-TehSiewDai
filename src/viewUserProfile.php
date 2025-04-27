@@ -36,7 +36,7 @@ if (isset($_GET['q'])) {
     $searchTerm = urldecode($searchTermWithoutQuotes);
 
     // Instantiate the search controller
-    $controller = new searchUserProfileController();
+    $controller = new SearchUserProfileController();
 
     // Search user accounts
     $userProfiles = $controller->searchUserProfile($searchTerm);
@@ -105,7 +105,7 @@ if (isset($_GET['q'])) {
                 <?php if ($up['isSuspend'] == 1) { echo 'YES'; } else { echo 'NO'; } ?>
               </td>
               <td>
-                <button onclick='window.location.href="updateUserProfile.php?id=<?php echo htmlspecialchars($up['id']); ?>"' class="view-button">View</button>
+                <button class="view-button" onclick='window.location.href="updateUserProfile.php?id=<?php echo htmlspecialchars($up["id"]); ?>"'>View</button>
               </td>
           </tr>
       <?php endforeach; ?>

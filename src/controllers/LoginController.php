@@ -55,7 +55,7 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['user
             header("Location: ../viewUserProfile.php");
             exit();
         } elseif ($_SESSION['userProfile'] == "Platform Management") {
-            header("Location: ../platformManagementView.php");
+            header("Location: ../viewServiceCategory.php");
             exit();
         } elseif ($_SESSION['userProfile'] == "Cleaner") {
             header("Location: ../cleanerView.php");
