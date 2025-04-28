@@ -23,7 +23,7 @@ if ($_SESSION['userProfile'] != "Platform Management") {
 $controller = new ViewAllServiceCategoryController();
 
 // Get all Service Category
-$serviceCategories = $controller->readAllServiceCategory();
+$serviceCategory = $controller->readAllServiceCategory();
 
 if (isset($_GET['q'])) {
 
@@ -39,7 +39,7 @@ if (isset($_GET['q'])) {
     $controller = new SearchServiceCategoryController();
 
     // Search user accounts
-    $serviceCategories = $controller->searchServiceCategory($searchTerm);
+    $serviceCategory = $controller->searchServiceCategory($searchTerm);
   }
 }
 
@@ -55,16 +55,19 @@ if (isset($_GET['q'])) {
 </head>
 
 <body>
+
   <!-- Navbar -->
-  <nav class="navbar" id="navbar">
-    <ul>
-      <li><a href="viewServiceCategory.php" id="selected">Service Category</a></li>
-      <li><a href="#">Report</a></li>
-    </ul>
-    <div class="logout-button">
-      <button onclick="window.location.href='logout.php'">Log out</button>
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src='img/cleaning-logo.png' alt="Cleaning Logo" width='48px' height='48px'/>
+      <a href="viewServiceCategory.php" class="active">Services</a>
+      <a href="#">Report</a>
     </div>
-  </nav>
+    <div class="navbar-right">
+      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
+    </div>
+  </div>
 
   <!-- Headline -->
   <h1>Service Category</h1>
@@ -95,32 +98,32 @@ if (isset($_GET['q'])) {
         </tr>
       </thead>
       <tbody>
-      <?php foreach ($serviceCategories as $sc): ?>
+      <?php foreach ($serviceCategory as $sc): ?>
           <tr>
-              <td><?php echo htmlspecialchars($sc['id']); ?></td>
-              <td><?php echo htmlspecialchars($sc['serviceName']); ?></td>
-              <td><?php echo htmlspecialchars($sc['serviceCategory']); ?></td>
+              <td><?php echo htmlspecialchars($sc->getId()); ?></td>
+              <td><?php echo htmlspecialchars($sc->getCategory()); ?></td>
+              <td><?php echo htmlspecialchars($sc->getDescription()); ?></td>
               <td>
-                <button class="view-button" onclick='window.location.href="updateServiceCategory.php?id=<?php echo htmlspecialchars($sc["id"]); ?>"'>View</button>
-                <button class="delete-button" onclick="deleteButtonClicked('<?php echo htmlspecialchars($sc['id']); ?>')">Delete</button>
+                <button class="view-button" onclick='window.location.href="updateServiceCategory.php?id=<?php echo htmlspecialchars($sc->getId()); ?>"'><ion-icon name="eye-outline"></ion-icon>View</button>
+                <button class="delete-button" onclick="deleteButtonClicked('<?php echo htmlspecialchars($sc->getId()); ?>')"><ion-icon name="trash-outline"></ion-icon>Delete</button>
               </td>
               
           </tr>
       <?php endforeach; ?>
-    </tbody>
-  </table>
-</div>
+      </tbody>
+    </table>
+  </div>
 
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-<script>
-  function deleteButtonClicked(id) {
-    if (confirm("Confirm Delete Service Category?") == true) {
-      window.location.href='./controllers/DeleteServiceCategoryController.php?id=' + id;
+  <script>
+    function deleteButtonClicked(id) {
+      if (confirm("Confirm Delete Service Category?") == true) {
+        window.location.href='./controllers/DeleteServiceCategoryController.php?id=' + id;
+      }
     }
-  }
-</script>
-
+  </script>
+  
 </body>
 </html>

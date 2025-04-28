@@ -29,17 +29,19 @@ if ($_SESSION['userProfile'] != "User Admin") {
 </head>
 
 <body>
+
   <!-- Navbar -->
-  <!-- Navbar -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="viewUserProfile.php" id="selected">User Profile</a></li>
-      <li><a href="viewUserAccount.php">User Account</a></li>
-    </ul>
-    <div class="logout-button">
-      <button class="logout-button" onclick="window.location.href='logout.php'">Log out</button>
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src='img/cleaning-logo.png' alt="Cleaning Logo" width='48px' height='48px'/>
+      <a href="viewUserProfile.php" class="active">User Profile</a>
+      <a href="viewUserAccount.php">User Account</a>
     </div>
-  </nav>
+    <div class="navbar-right">
+      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
+    </div>
+  </div>
 
   <!-- info -->
   <div class="form-container">

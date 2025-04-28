@@ -2,30 +2,18 @@
 require_once('Database.php');
 
 class UserAccount {
-    private $id;
-    private $username; 
-    private $password;
-    private $fullName;
-    private $email;
-    private $phone;
-    private $userProfile;
-    private $isSuspend;
-
-    // Constructor
-    public function __construct() {
-        $this->id = null;
-        $this->username = null;
-        $this->password = null;
-        $this->fullName = null;
-        $this->email = null;
-        $this->phone = null;
-        $this->userProfile = null;
-        $this->isSuspend = null;
-    }  
+    private int $id;
+    private string $username; 
+    private string $password;
+    private string $fullName;
+    private string $email;
+    private string $phone;
+    private string $userProfile;
+    private int $isSuspend;
 
     // CRUD Operations //
 
-    public function createUserAccount($username, $password, $fullName, $email, $phone, $userProfile) {
+    public function createUserAccount(string $username, string $password, string $fullName, string $email, string $phone, string $userProfile): bool {
     /*  Inserts New User Account:
         $username: string
         $password: string
@@ -73,11 +61,11 @@ class UserAccount {
         
     }
 
-    public function readUserAccount($id) {
+    public function readUserAccount(int $id): ?UserAccount {
     /*  Select User Account By ID
         $id: int
 
-        Returns: Single UserAccount
+        Returns: Single UserAccount (nullable)
     */
         
         // New DB Conn
@@ -94,8 +82,8 @@ class UserAccount {
             
             // execute() Success?
             if ($execResult) {
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $user;
+                $userAccount = $stmt->fetchObject('UserAccount');
+                return $userAccount;
             } else {
                 return null;
             }
@@ -107,10 +95,10 @@ class UserAccount {
         
     }
 
-    public function readAllUserAccount() {
+    public function readAllUserAccount(): ?array {
     /*  Select All User Account
 
-        Returns: Array of User Accounts
+        Returns: Array of UserAccounts (nullable)
     */
 
         // New DB Conn
@@ -126,8 +114,10 @@ class UserAccount {
             // execute() Success?
             if ($execResult) {
                 // Execute was successful, now fetch the data
-                $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $users;
+                $userAccounts = $stmt->fetchAll(PDO::FETCH_CLASS, 'UserAccount');
+                return $userAccounts;
+            } else {
+                return null;
             }
 
         } catch (PDOException $e) {
@@ -138,14 +128,14 @@ class UserAccount {
         
     }
 
-    public function updateUserAccount($id, $username, $password, $fullName, $email, $phone, $userProfile) {
+    public function updateUserAccount(int $id, string $username, ?string $password, string $fullName, string $email, string $phone, string $userProfile): bool {
     /*  Updates a User Account:
         If password is NULL, attribute will not be updated 
         Otherwise, it will be hashed (MD5) and updated
 
         $id: int
         $username: string
-        $password: string or NULL
+        $password: string (nullable)
         $fullName: string
         $email: string
         $phone: string
@@ -199,7 +189,7 @@ class UserAccount {
         
     }
 
-    public function suspendUserAccount($id) {
+    public function suspendUserAccount(int $id): bool {
     /*  Suspends a User Account:
         $id: int
         Returns: Boolean
@@ -231,10 +221,10 @@ class UserAccount {
         }
     }
 
-    public function searchUserAccount($searchTerm) {
+    public function searchUserAccount($searchTerm): ?array {
     /*  Searches for User Account(s):
         $searchTerm: string
-        Returns: Array of UserAccounts
+        Returns: Array of UserAccounts (nullable)
     */
 
         // New DB Conn
@@ -251,7 +241,7 @@ class UserAccount {
 
             // Search Success ?
             if ($execResult) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $stmt->fetchAll(PDO::FETCH_CLASS, 'UserAccount');
             } else {
                 return null;
             }
@@ -262,7 +252,7 @@ class UserAccount {
     }
 
 
-    public function login($username, $password, $userProfile) {
+    public function login(string $username, string $password, string $userProfile): ?UserAccount {
     /*  Login (Authenticate) UserAccount
         Checks for UserAccount (UA) Exists, Authenticate Password,
         Then Checks if UserProfile or UA  is Suspended
@@ -271,9 +261,8 @@ class UserAccount {
         $password: string
         $userProfiel: string
 
-        Return: UserAccount or NULL
+        Return: UserAccount (nullable)
     */
-
 
         // New DB Conn
         $db_handle = new Database();
@@ -290,10 +279,11 @@ class UserAccount {
 
             // Ensure Only 1 Row
             if ($stmt->rowCount() == 1) {
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $userAccount = $stmt->fetchObject('UserAccount');
                 
                 // Verify Password
-                if (md5($password) == $user["password"]) {
+                if (md5($password) == $userAccount->getPassword()) {
                     $sql = "SELECT `isSuspend` FROM `UserProfile` WHERE `role` = '$userProfile'";
                     $stmt = $db_conn->query($sql);
                     $suspendStatus = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -301,13 +291,13 @@ class UserAccount {
                     // Update User Object Suspend Status if User Profile is Suspended
                     if ($suspendStatus) {
                         if ($suspendStatus['isSuspend'] == 1) {
-                            $user['isSuspend'] = 1;
+                            $userAccount->updateIsSuspended(1);
                         }
                     }
 
                     unset($db_handle);
                     
-                    return $user;
+                    return $userAccount;
                 } else {
                     return null;
                 }
@@ -321,6 +311,26 @@ class UserAccount {
             error_log("Database query failed: " . $e->getMessage());
             unset($db_handle);
             return null;
+        }
+    }
+
+    // Accessor Methods
+    public function getId(): int { return $this->id; }
+    public function getUsername(): string { return $this->username; }
+    public function getPassword(): string { return $this->password; }
+    public function getFullName(): string { return $this->fullName; }
+    public function getEmail(): string { return $this->email; }
+    public function getPhone(): string { return $this->phone; }
+    public function getUserProfile(): string { return $this->userProfile; }
+    public function getSuspendStatus(): int { return $this->isSuspend; }
+
+    // Mutator Methods (only Suspend Status is Updated for Object)
+    private function updateIsSuspended(int $s): void { 
+        // Update if Valid, Else Use Default (assume User is Suspended)
+        if ($s == 0 | $s == 1) {
+            $this->isSuspend = $s;
+        } else {
+            error_log("Update UserAccount isSuspend Failed (Did not Update)");
         }
     }
 }

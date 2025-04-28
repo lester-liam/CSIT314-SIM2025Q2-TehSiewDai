@@ -7,105 +7,122 @@
 
 body {
     height: 100vh;
-    background-color: rgb(233, 239, 236);
+    background-color: #F6F6F6;
 }
+
+/*
+CSS Colours Template
+    Primary Color: #16423C
+    Secondary Color: #4B827B
+    Tertiary Color: #FBFBFB / #ADCDC8
+
+    Danger Color: #B22222 / #CD5C5C (Hover)
+    Success Color: #32CD32
+    Disabled Color: #6e6d6d
+*/
 
 .alert-danger {
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid red;
+    border: 1px solid #B22222;
     border-radius: 4px;
-    color: red;
+    color: #B22222;
 }
 
 .alert-success {
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid rgb(65, 195, 65);
+    border: 1px solid #32CD32;
     border-radius: 4px;
-    color: rgb(65, 195, 65);
+    color: #32CD32;
 }
 
 .text-danger {
-    color: red;
+    color: #B22222;
     padding: 2px
 }
 
+/* Navbar Styling */
+
 .navbar {
-    width: 100%;
-    height: 60px;
-    background-color: rgb(22, 66, 60);
-    padding: 15px 105px;
+    background-color: #16423C;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #FBFBFB;
+}
+
+.navbar-left {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    margin-left: 105px;
 }
 
-.navbar ul {
-    list-style: none;
-    gap: 40px;
-    display: flex;
-    margin-left: 20px;
+.navbar-left img {
+    margin-right: 10px;
 }
 
-.navbar ul li {
-    position: relative;
-}
-
-.navbar ul li a {
-    color: rgb(252, 252, 252);
+.navbar-left a {
+    color: #FBFBFB;
     text-decoration: none;
-    font-size: 18px;
-    transition: 0.2s ease;
+    margin-right: 20px;
+    padding: 10px 0;
+    position: relative;
+    font-weight: bold;
 }
 
-.navbar ul li a::before {
+.navbar-left a:hover {
+    color: #ADCDC8;
+}
+
+.navbar-left a.active::after {
     content: '';
     position: absolute;
-    width: 0;
-    height: 2px;
-    left: 0px;
-    bottom: -5px;
-    background: rgb(255, 255, 255);
-    transition: 0.2s ease;
-}
-
-.navbar ul li a:hover {
-    color: rgb(255, 255, 255);
-}
-
-.navbar ul li a:hover::before {
+    bottom: 0;
+    left: 0;
     width: 100%;
-    }
-
-.navbar #selected {
-    color: #ECCCBE;
+    height: 2px;
+    background-color: #FBFBFB;
 }
 
-.logout-button button {
-    font-size: 18px;
-    padding: 7px 15px;
-    background-color: rgb(52, 91, 76);
-    color: white;
+.navbar-right {
+    display: flex;
+    align-items: center;
+    margin-right: 105px;
+}
+
+.navbar-right-text {
+    margin-right: 15px;
+    color: #FBFBFB;
+    font-weight: bold;
+}
+
+.logout-button {
+    background-color: #ADCDC8;
+    color: #16423C;
     border: none;
+    padding: 8px 15px;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.2s ease;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-.logout-button button:hover {
-    background-color: rgb(106, 156, 137);
+.logout-button:hover {
+    background-color: #4B827B;
+    color: #ADCDC8;
 }
 
 h1 {
     margin-left: 105px;
     margin-top: 30px;
-    color: rgb(22, 66, 60);
+    color: #16423C;
 }
 
 h2 {
     text-align: center;
-    color: rgb(22, 66, 60);
+    color: #16423C;
 }
 
 .section-container {
@@ -129,8 +146,6 @@ h2 {
 .search input {
     padding: 8px 12px;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     width: 300px;
 }
 
@@ -143,16 +158,15 @@ h2 {
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: rgb(22, 66, 60);
+    color:  #16423C
 }
 
 .input-wrapper input {
     padding: 8px 12px 8px 35px;
     font-size: 16px;
-    border: 1px solid white;
-    border-radius: 4px;
-    background-color: #FFFFFF;
-    color: rgb(22, 66, 60);
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    background-color: #FBFBFB;
+    border: None;
     width: 300px;
 }
 
@@ -160,187 +174,14 @@ h2 {
     display: flex; 
     align-items: center;
     gap: 12px;
-    text-decoration: none;
-}
-
-.user-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: rgb(255, 255, 255);
-}
-
-.user-table td:last-child {
-    text-align: right;
-}
-
-
-.user-table thead {
-    background-color: rgb(196, 218, 210);
-    font-weight: bold;
-    color: rgb(22, 66, 60);
-}
-
-.user-table th,
-.user-table td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 0.5px solid rgb(196, 218, 210);
-}
-
-.suspended-yes {
-    color: rgb(146, 49, 49);
-    font-weight: bold;
-}
-
-.suspended-no {
-    color: rgb(22, 66, 60);
-    font-weight: bold;
-}
-
-/* Form CSS Styling */
-
-.form-container {
-    position: relative;
-    width: 540px;
-    height: auto;
-    max-width: 600px;
-    margin: auto;
-    margin-top: 180px;
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-    font-weight: bold;
-    color: rgb(22, 66, 60);
-}
-
-.form-group input[type="text"],
-.form-group input[type="password"],
-.form-group input[type="email"],
-.form-group input[type="tel"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-top: 6px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-top: 6px;
-    font-size: 1em; /* Adjust font size as needed */
-    color: #333; /* Adjust text color */
-    appearance: none; /* Remove default arrow */
-}
-
-.form-group select option {
-    padding: 8px;
-    font-size: 1em;
-    color: #333;
-    background-color: white; /* Ensure white background for options */
-}
-
-.form-group select:focus {
-    border-color: rgb(22, 66, 60);
-    outline: none; /* Remove default focus outline */
-    box-shadow: 0 0 5px rgba(22, 66, 60, 0.5); /* Add a subtle focus shadow */
-}
-
-input[readonly] {
-    background-color: #e9ecef;
-    color: #6c757d;
-    cursor: not-allowed; 
-}
-
-.radio-group {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    accent-color:  rgb(22, 66, 60);
-}
-
-.submit-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 30px;
-}
-
-.submit-button {
-    flex: 1;
-    background-color: rgb(22, 66, 60);
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.submit-button:hover {
-    background-color: rgb(106, 156, 137);
-}
-
-/* Buttons Styling */
-
-.back-button {
-    flex: 1;
-    background-color: white;
-    color: rgb(22, 66, 60);
-    border: 2px solid rgb(22, 66, 60);
-    border-radius: 6px;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.2s ease;
-    text-align: center;
-    text-decoration: none;
-}
-
-.back-button:hover {
-    background-color: rgb(233, 239, 236);
-}
-
-.suspend-button {
-    background-color: rgb(223, 45, 45);
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 25%;
-}
-
-.suspend-button-disabled {
-    background-color: #6e6d6d;
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 25%;
 }
 
 .search-button,
 .create-button {
     font-size: 16px;
     padding: 7px 20px;
-    color: white;
-    background-color: rgb(22, 66, 60);
+    background-color: #16423C;
+    color: #FBFBFB;
     border: none;
     border-radius: 5px;
     align-items: center;
@@ -349,13 +190,67 @@ input[readonly] {
 
 .search-button:hover,
 .create-button:hover {
-    background-color: rgb(22, 66, 60);
+    background-color: #ADCDC8;
+    color: #16423C;
     transition: 0.2s ease;
 }
 
+
+/* Table CSS Style */
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #FBFBFB;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+}
+
+.user-table td:last-child {
+    text-align: right; 
+    display: flex; 
+    justify-content: flex-end; 
+}
+
+.user-table button {
+    display: flex; 
+    align-items: center;
+    gap: 12px;
+}
+
+.user-table button + button {
+    margin-left: 5px;
+}
+
+
+.user-table thead {
+    background-color: #ADCDC8;
+    font-weight: bold;
+    color: #16423C;
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 0.5px solid #4B827B;
+    color: #16423C;
+}
+
+.suspended-yes {
+    color: #B22222;
+    font-weight: bold;
+}
+
+.suspended-no {
+    color: #16423C;
+    font-weight: bold;
+}
+
 .view-button {
-    background-color: rgb(22, 66, 60);
-    color: white;
+    background-color: #16423C;
+    color: #FBFBFB;
     border: none;
     border-radius: 5px;
     padding: 6px 16px;
@@ -366,12 +261,13 @@ input[readonly] {
 }
     
 .view-button:hover {
-    background-color: rgb(106, 156, 137);
+    background-color: #ADCDC8;
+    color: #16423C
 }
 
 .delete-button {
-    background-color: rgb(223, 45, 45);
-    color: white;
+    background-color: #B22222;
+    color: #FBFBFB;
     border: none;
     border-radius: 5px;
     padding: 6px 16px;
@@ -382,5 +278,151 @@ input[readonly] {
 }
     
 .delete-button:hover {
-    background-color: rgb(221, 101, 101);
+    background-color: #CD5C5C;
+    color: #FBFBFB;
+}
+
+/* Form CSS Styling */
+
+.form-container {
+    position: relative;
+    width: 540px;
+    height: auto;
+    max-width: 600px;
+    margin: auto;
+    margin-top: 5%;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+}
+
+.form-container img {
+    display: block; 
+    margin: 0 auto; 
+    margin-bottom: 10px; 
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #16423C;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ADCDC8;
+    color: #16423C;
+    border-radius: 6px;
+    margin-top: 6px;
+}
+
+.form-group input[readonly] {
+    background-color: #6e6d6d;
+    color: #FBFBFB;
+    cursor: not-allowed; 
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ADCDC8;
+    border-radius: 6px;
+    margin-top: 6px;
+    font-size: 1em; 
+    color: #16423C;
+    appearance: none; 
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2316423C" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 16px; /* Adjust size as needed */
+}
+
+.form-group select option {
+    padding: 8px;
+    font-size: 1em;
+    color: #16423C;
+    background-color: #FBFBFB; /* Ensure white background for options */
+}
+
+.form-group select:focus {
+    border-color: #16423C;
+    outline: none;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+}
+
+.submit-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.suspend-button {
+    background-color: #B22222;
+    color: #FBFBFB;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 25%;
+}
+
+.suspend-button:hover {
+    background-color: #CD5C5C;
+    color: #FBFBFB;
+}
+
+.suspend-button-disabled {
+    background-color: #6e6d6d;
+    color: #FBFBFB;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 25%;
+}
+
+.back-button {
+    flex: 1;
+    background-color: #FBFBFB;
+    color: #16423C;
+    border: 2px solid #16423C;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.back-button:hover {
+    background-color: #ADCDC8;
+    border: 2px solid #16423C;
+}
+
+.submit-button {
+    flex: 1;
+    background-color: #16423C;
+    color: #FBFBFB;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #ADCDC8;
+    color: #16423C;
 }

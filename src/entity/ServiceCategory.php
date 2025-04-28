@@ -2,24 +2,18 @@
 require_once('Database.php');
 
 class ServiceCategory {
-    private $id;
-    private $serviceName; 
-    private $serviceCategory;
 
-    // Constructor Class
-    public function __construct() {
-        $this->id = null;
-        $this->serviceName = null;
-        $this->serviceCategory = null;
-    }  
+    private int $id;
+    private string $category;
+    private string $description;
 
     // CRUD Operations //
 
     //  Create ServiceCategory
-    public function createServiceCategory($serviceName, $serviceCategory) {
+    public function createServiceCategory(string $category, string $description): bool {
     /*  Inserts New User Profile:
-        $serviceName: string
-        $serviceCategory: string
+        $category: string
+        $description: string
 
         Returns: Boolean 
     */
@@ -30,9 +24,9 @@ class ServiceCategory {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("INSERT INTO `ServiceCategory` (`serviceName`, `serviceCategory`) VALUES (:serviceName, :serviceCategory)");
-            $stmt->bindParam(':serviceName', $serviceName);
-            $stmt->bindParam(':serviceCategory', $serviceCategory);
+            $stmt = $db_conn->prepare("INSERT INTO `ServiceCategory` (`category`, `description`) VALUES (:category, :description)");
+            $stmt->bindParam(':category', $category);
+            $stmt->bindParam(':description', $description);
             $execResult = $stmt->execute();
             
             unset($db_handle); // Delete DB Conn
@@ -53,11 +47,11 @@ class ServiceCategory {
     }
 
     //  Read ServiceCategory
-    public function readServiceCategory($id) {
+    public function readServiceCategory(int $id): ?ServiceCategory  {
     /*  Select Service Category By ID
         $id: int
 
-    Returns: Single ServiceCategory 
+        Returns: Single ServiceCategory (nullable)
     */
 
         // New DB Conn
@@ -74,8 +68,8 @@ class ServiceCategory {
             
             // execute() Success?
             if ($execResult) {
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $user;
+                $serviceCategory = $stmt->fetchObject('ServiceCategory');
+                return $serviceCategory;
             } else {
                 return null;
             }
@@ -87,10 +81,10 @@ class ServiceCategory {
         
     }
 
-    public function readAllServiceCategory() {
+    public function readAllServiceCategory(): ?array {
     /*  Select All ServiceCategory
 
-        Returns: Array of ServiceCategory
+        Returns: Array of ServiceCategory (nullable)
     */
 
         // New DB Conn
@@ -106,8 +100,10 @@ class ServiceCategory {
             // execute() Success?
             if ($execResult) {
                 // Execute was successful, now fetch the data
-                $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $users;
+                $serviceCategory = $stmt->fetchAll(PDO::FETCH_CLASS, 'ServiceCategory');
+                return $serviceCategory;
+            } else {
+                return null;
             }
 
         } catch (PDOException $e) {
@@ -118,12 +114,12 @@ class ServiceCategory {
         
     }
 
-    public function updateServiceCategory($id, $serviceName, $serviceCategory) {
+    public function updateServiceCategory(int $id, string $category, string $description): bool {
     /*  Updates a User Profile:
 
         $id: int
-        $serviceName: string
-        $serviceCategory: string
+        $category: string
+        $description: string
 
         Returns: Boolean
     */
@@ -134,9 +130,9 @@ class ServiceCategory {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("UPDATE `ServiceCategory` SET `serviceName` = :serviceName, `serviceCategory` = :serviceCategory WHERE `id` = $id");
-            $stmt->bindParam(':serviceName', $serviceName);
-            $stmt->bindParam(':serviceCategory', $serviceCategory);
+            $stmt = $db_conn->prepare("UPDATE `ServiceCategory` SET `category` = :category, `description` = :description WHERE `id` = $id");
+            $stmt->bindParam(':category', $category);
+            $stmt->bindParam(':description', $description);
             
             $execResult = $stmt->execute();
     
@@ -155,7 +151,7 @@ class ServiceCategory {
         }
     }
     
-    public function deleteServiceCategory($id) {
+    public function deleteServiceCategory(int $id): bool {
     /*  Deletes a Service Category:
         $id: int
         Returns: Boolean
@@ -186,10 +182,10 @@ class ServiceCategory {
     }
 
     // Search Service Category
-    public function searchServiceCategory($searchTerm) {
+    public function searchServiceCategory(string $searchTerm): ?array {
     /*  Searches for ServiceCategory:
         $searchTerm: string
-        Returns: Array of ServiceCategory
+        Returns: Array of ServiceCategory (nullable)
     */
 
         // New DB Conn
@@ -199,14 +195,14 @@ class ServiceCategory {
         // SQL Statement
         try {
             $searchTerm = "%" . $searchTerm . "%";
-            $stmt = $db_conn->prepare("SELECT * FROM `ServiceCategory` WHERE `serviceName` LIKE :term OR `serviceCategory` LIKE :term");
+            $stmt = $db_conn->prepare("SELECT * FROM `ServiceCategory` WHERE `category` LIKE :term OR `description` LIKE :term");
             $stmt->bindParam(':term', $searchTerm);
             $execResult = $stmt->execute();
             unset($db_handle); // Delete DB Conn
 
             // Search Success ?
             if ($execResult) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $stmt->fetchAll(PDO::FETCH_CLASS, 'ServiceCategory');
             } else {
                 return null;
             }
@@ -215,5 +211,11 @@ class ServiceCategory {
             return null;
         }
     }
+
+    // Accessor Methods
+    public function getId(): int { return $this->id; }
+    public function getCategory(): string { return $this->category; }
+    public function getDescription(): string { return $this->description; }
+
 }
 ?>

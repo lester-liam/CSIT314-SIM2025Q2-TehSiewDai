@@ -23,7 +23,7 @@ if ($_SESSION['userProfile'] != "User Admin") {
 $controller = new ViewAllUserAccountController();
 
 // Get all user accounts
-$userAccounts = $controller->readAllUserAccount();
+$userAccount = $controller->readAllUserAccount();
 
 if (isset($_GET['q'])) {
 
@@ -39,7 +39,7 @@ if (isset($_GET['q'])) {
     $controller = new SearchUserAccountController();
 
     // Search user accounts
-    $userAccounts = $controller->searchUserAccount($searchTerm);
+    $userAccount = $controller->searchUserAccount($searchTerm);
   }
 }
 
@@ -55,16 +55,19 @@ if (isset($_GET['q'])) {
 </head>
 
 <body>
+
   <!-- Navbar -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="viewUserProfile.php">User Profile</a></li>
-      <li><a href="viewUserAccount.php" id="selected">User Account</a></li>
-    </ul>
-    <div class="logout-button">
-      <button class="logout-button" onclick="window.location.href='logout.php'">Log out</button>
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src='img/cleaning-logo.png' alt="Cleaning Logo" width='48px' height='48px'/>
+      <a href="viewUserProfile.php">User Profile</a>
+      <a href="viewUserAccount.php" class="active">User Account</a>
     </div>
-  </nav>
+    <div class="navbar-right">
+      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
+    </div>
+  </div>
 
   <!-- Headline -->
   <h1>User Account</h1>
@@ -97,25 +100,23 @@ if (isset($_GET['q'])) {
         </tr>
       </thead>
       <tbody>
-      <?php foreach ($userAccounts as $ua): ?>
+      <?php foreach ($userAccount as $ua): ?>
           <tr>
-              <td><?php echo htmlspecialchars($ua['id']); ?></td>
-              <td><?php echo htmlspecialchars($ua['username']); ?></td>
-              <td><?php echo htmlspecialchars($ua['email']); ?></td>
-              <td><?php echo htmlspecialchars($ua['phone']); ?></td>
-              <td class="<?php if ($ua['isSuspend'] == 1) { echo 'suspended-yes'; } else { echo 'suspended-no'; } ?>">
-                <?php if ($ua['isSuspend'] == 1) { echo 'YES'; } else { echo 'NO'; } ?>
+              <td><?php echo htmlspecialchars($ua->getId()); ?></td>
+              <td><?php echo htmlspecialchars($ua->getUsername()); ?></td>
+              <td><?php echo htmlspecialchars($ua->getEmail()); ?></td>
+              <td><?php echo htmlspecialchars($ua->getPhone()); ?></td>
+              <td class="<?php if ($ua->getSuspendStatus() == 1) { echo 'suspended-yes'; } else { echo 'suspended-no'; } ?>">
+                <?php if ($ua->getSuspendStatus() == 1) { echo 'YES'; } else { echo 'NO'; } ?>
               </td>
               <td>
-                <button class="view-button" onclick='window.location.href="updateUserAccount.php?id=<?php echo htmlspecialchars($ua["id"]); ?>"'>View</button>
+                <button class="view-button" onclick='window.location.href="updateUserAccount.php?id=<?php echo htmlspecialchars($ua->getId()); ?>"'><ion-icon name="eye-outline"></ion-icon>View</button>
               </td>
           </tr>
       <?php endforeach; ?>
-  </tbody>
-</table>
+      </tbody>
+    </table>
   </div>
-
-
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

@@ -2,23 +2,15 @@
 require_once('Database.php');
 
 class UserProfile {
-    private $id;
-    private $role; 
-    private $description;
-    private $isSuspend;
-
-    // Constructor Class
-    public function __construct() {
-        $this->id = null;
-        $this->role = null;
-        $this->isSuspend = null;
-        $this->description = null;
-    }  
+    private int $id;
+    private string $role; 
+    private string $description;
+    private int $isSuspend; 
 
     // CRUD Operations //
 
     //  Create User Profile
-    public function createUserProfile($role, $description) {
+    public function createUserProfile(string $role, string $description): bool {
     /*  Inserts New User Profile:
         $role: string
         $description: string
@@ -55,11 +47,11 @@ class UserProfile {
     }
 
     //  Read UserProfile
-    public function readUserProfile($id) {
+    public function readUserProfile(int $id): ?UserProfile {
     /*  Select User Profile By ID
         $id: int
 
-    Returns: Single UserProfile 
+        Returns: Single UserProfile (nullable)
     */
 
         // New DB Conn
@@ -76,8 +68,8 @@ class UserProfile {
             
             // execute() Success?
             if ($execResult) {
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $user;
+                $userProfile = $stmt->fetchObject('UserProfile');
+                return $userProfile;
             } else {
                 return null;
             }
@@ -89,10 +81,10 @@ class UserProfile {
         
     }
 
-    public function readAllUserProfile() {
+    public function readAllUserProfile(): ?array {
     /*  Select All User Profile
 
-        Returns: Array of User Profiles
+        Returns: Array of User Profiles (nullable)
     */
 
         // New DB Conn
@@ -108,8 +100,10 @@ class UserProfile {
             // execute() Success?
             if ($execResult) {
                 // Execute was successful, now fetch the data
-                $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $users;
+                $userProfile = $stmt->fetchAll(PDO::FETCH_CLASS, 'UserProfile');
+                return $userProfile;
+            } else {
+                return null;
             }
 
         } catch (PDOException $e) {
@@ -120,7 +114,7 @@ class UserProfile {
         
     }
 
-    public function updateUserProfile($id, $role, $description) {
+    public function updateUserProfile(int $id, string $role, string $description): bool {
     /*  Updates a User Profile:
 
         $id: int
@@ -157,7 +151,7 @@ class UserProfile {
         }
     }
     
-    public function suspendUserProfile($id) {
+    public function suspendUserProfile(int $id): bool {
     /*  Suspends a User Profile:
         $id: int
         Returns: Boolean
@@ -188,10 +182,10 @@ class UserProfile {
     }
 
     // Search User Profile
-    public function searchUserProfile($searchTerm) {
+    public function searchUserProfile(string $searchTerm): ?array {
     /*  Searches for User Profile(s):
         $searchTerm: string
-        Returns: Array of UserProfile
+        Returns: Array of UserProfile (nullable)
     */
 
         // New DB Conn
@@ -208,7 +202,7 @@ class UserProfile {
 
             // Search Success ?
             if ($execResult) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $stmt->fetchAll(PDO::FETCH_CLASS, 'UserProfile');
             } else {
                 return null;
             }
@@ -217,5 +211,12 @@ class UserProfile {
             return null;
         }
     }
+
+    // Accessor  Methods
+    public function getId(): int { return $this->id; }
+    public function getRole(): string { return $this->role; }
+    public function getDescription(): string { return $this->description; }
+    public function getSuspendStatus(): int { return $this->isSuspend; }
+
 }
 ?>

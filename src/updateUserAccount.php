@@ -20,15 +20,17 @@ if ($_SESSION['userProfile'] != "User Admin") {
 
 // Check if ID is Set, Otherwise Return View All User Account Page
 if (!isset($_GET['id'])) {
+
   header("Location: viewUserAccount.php");
   exit();
+
 } else {
 
   // Instantiate the controller
   $controller = new ViewUserAccountController();
 
-  // Get all user accounts
-  $ua = $controller->readUserAccount($_GET['id']);
+  // Get User account
+  $userAccount = $controller->readUserAccount($_GET['id']);
   
 }
 
@@ -45,16 +47,19 @@ if (!isset($_GET['id'])) {
 </head>
 
 <body>
+
   <!-- Navbar -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="viewUserProfile.php">User Profile</a></li>
-      <li><a href="viewUserAccount.php" id="selected">User Account</a></li>
-    </ul>
-    <div class="logout-button">
-      <button onclick="window.location.href='logout.php'">Log out</button>
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src='img/cleaning-logo.png' alt="Cleaning Logo" width='48px' height='48px'/>
+      <a href="viewUserProfile.php">User Profile</a>
+      <a href="viewUserAccount.php" class="active">User Account</a>
     </div>
-  </nav>
+    <div class="navbar-right">
+      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
+    </div>
+  </div>
 
   <!-- info -->
   <div class="form-container">
@@ -73,12 +78,12 @@ if (!isset($_GET['id'])) {
 
       <div class="form-group">
         <label for="id">ID:</label>
-        <input type="text" id="id" name="id" value="<?php echo htmlspecialchars($ua['id']); ?>" readonly>
+        <input type="text" id="id" name="id" value="<?php echo htmlspecialchars($userAccount->getId()); ?>" readonly>
       </div>
 
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($ua['username']); ?>" required>
+        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($userAccount->getUsername()); ?>" required>
         <span id='usernameValidation' class='text-danger'></span>
       </div>
 
@@ -90,28 +95,28 @@ if (!isset($_GET['id'])) {
 
       <div class="form-group">
         <label for="fullName">Full Name:</label>
-        <input type="text" id="fullName" name="fullName" value="<?php echo htmlspecialchars($ua['fullName']); ?>" required>
+        <input type="text" id="fullName" name="fullName" value="<?php echo htmlspecialchars($userAccount->getFullName()); ?>" required>
         <span id='fullNameValidation' class='text-danger'></span>
       </div>
 
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($ua['email']); ?>" required>
+        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($userAccount->getEmail()); ?>" required>
         <span id='emailValidation' class='text-danger'></span>
       </div>
 
       <div class="form-group">
         <label for="phone">Phone (SG)</label>
-        <input type="tel" id="phone" name="phone" pattern="[0-9]{8}" placeholder="Eg: 00000000" value="<?php echo htmlspecialchars($ua['phone']); ?>" required>
+        <input type="tel" id="phone" name="phone" pattern="[0-9]{8}" placeholder="Eg: 00000000" value="<?php echo htmlspecialchars($userAccount->getPhone()); ?>" required>
         <span id='phoneValidation' class='text-danger'></span>
       </div>
       
       <div class="form-group">
         <label for="userProfile">Role:</label>
-        <input type="text" id="userProfile" name="userProfile" value="<?php echo htmlspecialchars($ua['userProfile']); ?>" readonly>
+        <input type="text" id="userProfile" name="userProfile" value="<?php echo htmlspecialchars($userAccount->getUserProfile()); ?>" readonly>
       </div>
 
-      <?php if ($ua['isSuspend'] == 1) { ?>
+      <?php if ($userAccount->getSuspendStatus() == 1) { ?>
       
         <div class="form-group">
           <button type="button" class="suspend-button-disabled" disabled>Suspend</button>

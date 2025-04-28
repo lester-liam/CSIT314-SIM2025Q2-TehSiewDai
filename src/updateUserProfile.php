@@ -18,6 +18,7 @@ if ($_SESSION['userProfile'] != "User Admin") {
      exit();
 }
 
+// Check if ID is Set, Otherwise Return View All User Profile Page
 if (!isset($_GET['id'])) {
   header("Location: viewUserProfile.php");
   exit();
@@ -25,8 +26,9 @@ if (!isset($_GET['id'])) {
   // Instantiate the controller
   $controller = new ViewUserProfileController();
 
-  // Get all user accounts
-  $up = $controller->readUserProfile($_GET['id']);
+  // Get User Profile
+  $userProfile = $controller->readUserProfile($_GET['id']);
+
 }
 
 ?>
@@ -42,16 +44,19 @@ if (!isset($_GET['id'])) {
 </head>
 
 <body>
+  
   <!-- Navbar -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="viewUserProfile.php" id="selected">User Profile</a></li>
-      <li><a href="viewUserAccount.php">User Account</a></li>
-    </ul>
-    <div class="logout-button">
-      <button class="logout-button" onclick="window.location.href='logout.php'">Log out</button>
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src='img/cleaning-logo.png' alt="Cleaning Logo" width='48px' height='48px'/>
+      <a href="viewUserProfile.php" class="active">User Profile</a>
+      <a href="viewUserAccount.php">User Account</a>
     </div>
-  </nav>
+    <div class="navbar-right">
+      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
+    </div>
+  </div>
 
   <!-- info -->
   <div class="form-container">
@@ -70,23 +75,23 @@ if (!isset($_GET['id'])) {
 
       <div class="form-group">
         <label for="id">ID:</label>
-        <input type="text" id="id" name="id" value="<?php echo htmlspecialchars($up['id']); ?>" readonly>
+        <input type="text" id="id" name="id" value="<?php echo htmlspecialchars($userProfile->getId()); ?>" readonly>
       </div>
 
       <div class="form-group">
         <label for="role">Role:</label>
-        <input type="text" id="role" name="role" value="<?php echo htmlspecialchars($up['role']); ?>"
-        <?php if ($up['role'] == "User Admin" || $up['role'] == "Homeowner" || $up['role'] == "Cleaner" || $up['role'] == 'Platform Management') { echo 'readonly'; } ?>>
+        <input type="text" id="role" name="role" value="<?php echo htmlspecialchars($userProfile->getRole()); ?>"
+        <?php if ($userProfile->getRole() == "User Admin" || $userProfile->getRole() == "Homeowner" || $userProfile->getRole() == "Cleaner" || $userProfile->getRole() == 'Platform Management') { echo 'readonly'; } ?>>
         <span id='roleValidation' class='text-danger'></span>
       </div>
 
       <div class="form-group">
         <label for="description">Description:</label>
-        <input type="text" id="description" name="description" value="<?php echo htmlspecialchars($up['description']); ?>" required>
+        <input type="text" id="description" name="description" value="<?php echo htmlspecialchars($userProfile->getDescription()); ?>" required>
         <span id='descValidation' class='text-danger'></span>
       </div>
 
-      <?php if ($up['isSuspend'] == 1) { ?>
+      <?php if ($userProfile->getSuspendStatus() == 1) { ?>
       
         <div class="form-group">
         <button type="button" class="suspend-button-disabled" disabled>Suspend</button>
