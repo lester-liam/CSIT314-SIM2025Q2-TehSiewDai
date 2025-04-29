@@ -2,12 +2,12 @@ CREATE DATABASE IF NOT EXISTS csit314;
 
 use csit314;
 
+DROP TABLE IF EXISTS ServiceHistory;
 DROP TABLE IF EXISTS Shortlist;
 DROP TABLE IF EXISTS CleanerService;
 DROP TABLE IF EXISTS ServiceCategory;
 DROP TABLE IF EXISTS UserAccount;
 DROP TABLE IF EXISTS UserProfile;
-
 
 CREATE TABLE UserProfile (
     `id` INT AUTO_INCREMENT,
@@ -50,42 +50,68 @@ CREATE TABLE CleanerService (
     `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`serviceCategoryID`) REFERENCES ServiceCategory(`id`) ON DELETE CASCADE,
-    FOREIGN KEY(`cleanerID`) REFERENCES UserAccount(`id`)
+    FOREIGN KEY (`cleanerID`) REFERENCES UserAccount(`id`)
 );
 
 CREATE TABLE Shortlist (
-    homeownerID INT NOT NULL,
-    serviceID INT NOT NULL,
-    shortlistedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (homeownerID, serviceID),
-    FOREIGN KEY (homeownerID) REFERENCES UserAccount(id),
-    FOREIGN KEY (serviceID) REFERENCES CleanerService(id) ON DELETE CASCADE
+    `homeownerID` INT NOT NULL,
+    `serviceID` INT NOT NULL,
+    `shortlistedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`homeownerID`, `serviceID`),
+    FOREIGN KEY (`homeownerID`) REFERENCES UserAccount(`id`),
+    FOREIGN KEY (`serviceID`) REFERENCES CleanerService(`id`) ON DELETE CASCADE
 );
 
-INSERT INTO UserProfile VALUES(1, "User Admin", "For User Management", 0);
-INSERT INTO UserProfile VALUES(2, "Platform Management", "For Service Categories Management", 0);
-INSERT INTO UserProfile VALUES(3, "Cleaner", "For cleaners to manage their services", 0);
-INSERT INTO UserProfile VALUES(4, "Homeowner", "For homeowners to access Cleaner Services.", 0);
+CREATE TABLE ServiceHistory (
+    `id` INT AUTO_INCREMENT,
+    `category` INT NOT NULL,
+    `cleanerID` INT NOT NULL,
+    `homeownerID` INT NOT NULL,
+    `serviceDate` TIMESTAMP NOT NULL,
+    PRIMARY KEY(`id`)
+);
 
-INSERT INTO UserAccount VALUES(1, 'u1', md5('u1'), 'User1', 'user1@example.com', '43202034', 'User Admin', 0);
-INSERT INTO UserAccount VALUES(2, 'pm1', md5('pm1'), 'User2', 'user2@example.com', '98620160', 'Platform Management', 0);
-INSERT INTO UserAccount VALUES(5, 'c1', md5('c1'), 'Cleaner1', 'user5@example.com', '98628160', 'Cleaner', 0);
-INSERT INTO UserAccount VALUES(6, 'c2', md5('c2'), 'Cleaner2', 'user6@example.com', '98629160', 'Cleaner', 0);
-INSERT INTO UserAccount VALUES(7, 'c3', md5('c3'), 'Cleaner3', 'user7@example.com', '98621160', 'Cleaner', 0);
+INSERT INTO UserProfile (id, role, description, isSuspend) VALUES
+(1, "User Admin", "For User Management", 0),
+(2, "Platform Management", "For Service Categories Management", 0),
+(3, "Cleaner", "For cleaners to manage their services", 0),
+(4, "Homeowner", "For homeowners to access Cleaner Services.", 0);
 
-INSERT INTO ServiceCategory (category, description) VALUES ('Deep Cleaning Service', 'For Specialized Cleaning Services');
+INSERT INTO UserAccount (id, username, password, fullName, email, phone, userProfile, isSuspend) VALUES
+(1, 'u1', md5('u1'), 'Adam', 'adam@example.com', '43202034', 'User Admin', 0),
+(2, 'pm1', md5('pm1'), 'Clara', 'clara@example.com', '98620160', 'Platform Management', 0),
+(3, 'c1', md5('c1'), 'John', 'john@example.com', '78515250', 'Cleaner', 0),
+(4, 'c2', md5('c2'), 'Lora', 'lora@example.com', '98645160', 'Cleaner', 0),
+(5, 'c3', md5('c3'), 'Jake', 'jake@example.com', '98698160', 'Cleaner', 0),
+(6, 'ho1', md5('ho1'), 'Kelly', 'kelly@example.com', '24666160', 'Homeowner', 0),
+(7, 'ho2', md5('ho2'), 'Alex', 'alex@example.com', '45666160', 'Homeowner', 0),
+(8, 'ho3', md5('ho3'), 'Steve', 'steve@example.com', '45976160', 'Homeowner', 0);
+
+INSERT INTO ServiceCategory (category, description) VALUES
+('Deep Cleaning Service', 'For Specialized Cleaning Services'),
+('Laundry Service', 'Wash, Fold, Iron');
 INSERT INTO ServiceCategory (category) VALUES ('Air Conditioning Service');
-INSERT INTO ServiceCategory (category, description) VALUES ('Laundry Service', 'Wash, Fold, Iron');
-
 
 INSERT INTO CleanerService (serviceCategoryID, cleanerID, price, numViews, numShortlists, createdAt, updatedAt) VALUES
-(1, 5, 25.00, 5, 2, '2025-04-28 09:00:00', '2025-04-28 09:00:00'),
-(2, 6, 30.50, 10, 3, '2025-04-28 11:30:00', '2025-04-28 11:30:00'),
-(3, 7, 40.00, 15, 5, '2025-04-25 14:00:00', '2025-04-25 14:00:00'),
-(1, 5, 28.00, 20, 7, '2025-04-24 16:45:00', '2025-04-28 13:15:00'),
-(2, 6, 35.00, 8, 2, '2025-04-20 10:00:00', '2025-04-20 10:00:00'),
-(3, 7, 50.00, 25, 10, '2025-01-15 18:00:00', '2025-01-15 18:00:00'),
-(1, 5, 22.00, 12, 4, '2025-03-01 09:30:00', '2025-03-01 09:30:00'),
-(2, 6, 38.00, 3, 1, '2025-04-28 15:00:00', '2025-04-28 16:30:00'),
-(3, 7, 45.00, 18, 6, '2024-11-20 12:00:00', '2024-11-20 12:00:00'),
-(1, 5, 27.50, 9, 3, '2025-04-22 08:00:00', '2025-04-26 17:45:00');
+(1, 3, 25.00, 5, 2, '2025-04-28 09:00:00', '2025-04-28 09:00:00'),
+(2, 4, 30.50, 10, 3, '2025-04-28 11:30:00', '2025-04-28 11:30:00'),
+(3, 5, 40.00, 15, 5, '2025-04-25 14:00:00', '2025-04-25 14:00:00'),
+(1, 3, 28.00, 20, 7, '2025-04-24 16:45:00', '2025-04-28 13:15:00'),
+(2, 4, 35.00, 8, 2, '2025-04-20 10:00:00', '2025-04-20 10:00:00'),
+(3, 5, 50.00, 25, 10, '2025-01-15 18:00:00', '2025-01-15 18:00:00'),
+(1, 3, 22.00, 12, 4, '2025-03-01 09:30:00', '2025-03-01 09:30:00'),
+(2, 4, 38.00, 3, 1, '2025-04-28 15:00:00', '2025-04-28 16:30:00'),
+(3, 5, 45.00, 18, 6, '2024-11-20 12:00:00', '2024-11-20 12:00:00'),
+(1, 3, 27.50, 9, 3, '2025-04-22 08:00:00', '2025-04-26 17:45:00');
+
+INSERT INTO Shortlist (homeownerID, serviceID) VALUES (6, 1);
+INSERT INTO Shortlist (homeownerID, serviceID) VALUES (6, 3);
+INSERT INTO Shortlist (homeownerID, serviceID) VALUES (7, 5);
+INSERT INTO Shortlist (homeownerID, serviceID) VALUES (8, 7);
+INSERT INTO Shortlist (homeownerID, serviceID) VALUES (8, 9);
+
+INSERT INTO ServiceHistory (category, cleanerID, homeownerID, serviceDate) VALUES (1, 3, 6, '2025-05-05 10:00:00');
+INSERT INTO ServiceHistory (category, cleanerID, homeownerID, serviceDate) VALUES (2, 4, 7, '2025-05-12 14:30:00');
+INSERT INTO ServiceHistory (category, cleanerID, homeownerID, serviceDate) VALUES (1, 5, 8, '2025-05-19 09:00:00');
+INSERT INTO ServiceHistory (category, cleanerID, homeownerID, serviceDate) VALUES (3, 3, 7, '2025-05-26 16:00:00');
+INSERT INTO ServiceHistory (category, cleanerID, homeownerID, serviceDate) VALUES (2, 4, 6, '2025-06-02 11:45:00');

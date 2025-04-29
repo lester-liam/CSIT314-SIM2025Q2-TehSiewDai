@@ -127,6 +127,7 @@ h2 {
 
 .section-container {
     padding: 0 105px;
+    padding-bottom: 5%;
     margin-top: 20px;
 }
 
@@ -238,7 +239,7 @@ h2 {
     color: #16423C;
 }
 
-.suspended-yes {
+.user-table .suspended-yes {
     color: #B22222;
     font-weight: bold;
 }

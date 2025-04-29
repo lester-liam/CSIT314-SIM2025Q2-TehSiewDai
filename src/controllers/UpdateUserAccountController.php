@@ -3,7 +3,7 @@ require_once "../entity/UserAccount.php";
 
 class UpdateUserAccountController {
     
-    private $userProfile;
+    private $userAccount;
 
     public function __construct() {
         $this->userAccount = new UserAccount();

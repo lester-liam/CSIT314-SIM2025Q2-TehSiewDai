@@ -10,7 +10,7 @@ class ServiceCategory {
     // CRUD Operations //
 
     //  Create ServiceCategory
-    public function createServiceCategory(string $category, string $description): bool {
+    public function createServiceCategory(string $category, ?string $description): bool {
     /*  Inserts New User Profile:
         $category: string
         $description: string
@@ -24,9 +24,21 @@ class ServiceCategory {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("INSERT INTO `ServiceCategory` (`category`, `description`) VALUES (:category, :description)");
+
+            $sql = "INSERT INTO `ServiceCategory` (`category`) VALUES (:category)";
+            
+            // Checks if Description is NULL
+            if (!is_null($description)) {
+                $sql = "INSERT INTO `ServiceCategory` (`category`, `description`) VALUES (:category, :description)";
+            }
+
+            $stmt = $db_conn->prepare($sql);
             $stmt->bindParam(':category', $category);
-            $stmt->bindParam(':description', $description);
+
+            if (!is_null($description)) {
+                $stmt->bindParam(':description', $description);
+            }
+
             $execResult = $stmt->execute();
             
             unset($db_handle); // Delete DB Conn
@@ -114,7 +126,7 @@ class ServiceCategory {
         
     }
 
-    public function updateServiceCategory(int $id, string $category, string $description): bool {
+    public function updateServiceCategory(int $id, string $category, ?string $description): bool {
     /*  Updates a User Profile:
 
         $id: int
@@ -130,7 +142,15 @@ class ServiceCategory {
 
         // SQL TryCatch Statement
         try {
-            $stmt = $db_conn->prepare("UPDATE `ServiceCategory` SET `category` = :category, `description` = :description WHERE `id` = $id");
+
+            $sql = "UPDATE `ServiceCategory` SET `category` = :category, `description` = :description WHERE `id` = $id";
+            
+            // Checks if Description is NULL
+            if (is_null($description)) {
+                $description = 'No Description';
+            }
+
+            $stmt = $db_conn->prepare($sql);
             $stmt->bindParam(':category', $category);
             $stmt->bindParam(':description', $description);
             
@@ -144,8 +164,9 @@ class ServiceCategory {
             } else {
                 return FALSE;
             }
+
         } catch (PDOException $e) {
-            error_log("Database insert failed: " . $e->getMessage());
+            error_log("Database update failed: " . $e->getMessage());
             unset($db_handle);
             return FALSE;
         }
