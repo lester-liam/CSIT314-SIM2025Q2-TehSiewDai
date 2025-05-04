@@ -2,14 +2,14 @@
 require_once('Database.php');
 
 class UserAccount {
-    private int $id;
-    private string $username; 
-    private string $password;
-    private string $fullName;
-    private string $email;
-    private string $phone;
-    private string $userProfile;
-    private int $isSuspend;
+    protected int $id;
+    protected string $username; 
+    protected string $password;
+    protected string $fullName;
+    protected string $email;
+    protected string $phone;
+    protected string $userProfile;
+    protected int $isSuspend;
 
     // CRUD Operations //
 
@@ -325,7 +325,7 @@ class UserAccount {
     public function getSuspendStatus(): int { return $this->isSuspend; }
 
     // Mutator Methods (only Suspend Status is Updated for Object)
-    private function updateIsSuspended(int $s): void { 
+    protected function updateIsSuspended(int $s): void { 
         // Update if Valid, Else Use Default (assume User is Suspended)
         if ($s == 0 | $s == 1) {
             $this->isSuspend = $s;

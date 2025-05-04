@@ -2,10 +2,10 @@
 require_once('Database.php');
 
 class UserProfile {
-    private int $id;
-    private string $role; 
-    private string $description;
-    private int $isSuspend; 
+    protected int $id;
+    protected string $role; 
+    protected string $description;
+    protected int $isSuspend; 
 
     // CRUD Operations //
 

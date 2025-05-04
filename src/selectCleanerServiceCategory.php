@@ -5,7 +5,6 @@ session_start();
 
 // Include the controller
 require_once 'controllers/ViewAllServiceCategoryController.php';
-require_once 'controllers/SearchServiceCategoryController.php';
 
 // Ensure User is Logged In
 if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
@@ -13,8 +12,8 @@ if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION
     exit();
 }
 
-// Ensure User is Platform Management
-if ($_SESSION['userProfile'] != "Platform Management") {
+// Ensure User is Cleaner
+if ($_SESSION['userProfile'] != "Cleaner") {
      header("Location: login.php");
      exit();
 }
@@ -25,32 +24,8 @@ $controller = new ViewAllServiceCategoryController();
 // Get all Service Category
 $serviceCategory = $controller->readAllServiceCategory();
 
-if (isset($_GET['q'])) {
-
-  if ($_GET['q'] != '') {
-
-    // Remove quotes (both single and double)
-    $searchTermWithoutQuotes = str_replace(['"', "'"], '', $_GET['q']);
-
-    // Decode URL-encoded characters, including %20 for spaces
-    $searchTerm = urldecode($searchTermWithoutQuotes);
-
-    // Remove 2 or more consecutive whitespaces
-    $searchTerm = preg_replace('/\s{2,}/', ' ', $searchTerm);
-
-    // Remove trailing whitespaces
-    $searchTerm = ltrim($searchTerm);
-    $searchTerm = rtrim($searchTerm);
-
-    // Instantiate the search controller
-    $controller = new SearchServiceCategoryController();
-
-    // Search user accounts
-    $serviceCategory = $controller->searchServiceCategory($searchTerm);
-  }
-}
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,8 +42,8 @@ if (isset($_GET['q'])) {
   <div class="navbar">
     <div class="navbar-left">
       <img src='img/cleaning-logo.png' alt="Cleaning Logo" width='48px' height='48px'/>
-      <a href="viewServiceCategory.php" class="active">Services</a>
-      <a href="#">Report</a>
+      <a href="viewCleanerService.php" class="active">My Services</a>
+      <a href="viewMatches.php">My Matches</a>
     </div>
     <div class="navbar-right">
       <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
@@ -77,20 +52,18 @@ if (isset($_GET['q'])) {
   </div>
 
   <!-- Headline -->
-  <h1>Service Category</h1>
+  <h1>Choose Service Type</h1>
 
   <div class="section-container">
     <div class="search">
       <div class="search-group">
         <div class="input-wrapper">
-          <ion-icon name="search-outline"></ion-icon>
-          <input type="text" id="search_term" type="text" placeholder="Search..." value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
+          <input type="hidden" type="text" placeholder="Search...">
         </div>
-        <button onclick='search()' class="search-button">Search</button>
       </div>
-      <button onclick='window.location.href="createServiceCategory.php"' class="create-button">
-        <ion-icon name="add-outline"></ion-icon>
-        Create
+      <button onclick='window.location.href="viewCleanerService.php"' class="create-button">
+        <ion-icon name="return-down-back-outline"></ion-icon>
+        Back
       </button>
     </div>
 
@@ -100,7 +73,7 @@ if (isset($_GET['q'])) {
         <tr>
           <th>ID</th>
           <th>Service Category</th>
-          <th>Description</th>
+          <th>Service Name</th>
           <th></th>
         </tr>
       </thead>
@@ -111,8 +84,7 @@ if (isset($_GET['q'])) {
               <td><?php echo htmlspecialchars($sc->getCategory()); ?></td>
               <td><?php echo htmlspecialchars($sc->getDescription()); ?></td>
               <td>
-                <button class="view-button" onclick='window.location.href="updateServiceCategory.php?id=<?php echo htmlspecialchars($sc->getId()); ?>"'><ion-icon name="eye-outline"></ion-icon>View</button>
-                <button class="delete-button" onclick="deleteButtonClicked('<?php echo htmlspecialchars($sc->getId()); ?>')"><ion-icon name="trash-outline"></ion-icon>Delete</button>
+                <button class="view-button" onclick='window.location.href="createCleanerService.php?id=<?php echo htmlspecialchars($sc->getId()); ?>"'><ion-icon name="add-outline"></ion-icon>Create</button>
               </td>
 
           </tr>
@@ -125,18 +97,6 @@ if (isset($_GET['q'])) {
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
   <script>
-
-    function search() {
-      var searchTermInput = document.getElementById("search_term");
-      var searchTerm = searchTermInput.value;
-
-      // Alphanumeric & Single Whitespace Regex
-      searchTerm = searchTerm.replace(/[^a-zA-Z0-9\s]+/g, '');
-      searchTerm = searchTerm.replace(/\s+/g, ' ');
-
-      window.location.href = 'viewServiceCategory.php?q="' + searchTerm + '"';
-    }
-
     function deleteButtonClicked(id) {
       if (confirm("Confirm Delete Service Category?") == true) {
         window.location.href='./controllers/DeleteServiceCategoryController.php?id=' + id;

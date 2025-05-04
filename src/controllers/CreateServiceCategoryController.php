@@ -2,7 +2,7 @@
 require_once '../entity/ServiceCategory.php';
 
 class CreateServiceCategoryController {
-    
+
     private $serviceCategory;
 
     public function __construct() {
@@ -13,7 +13,7 @@ class CreateServiceCategoryController {
     public function createServiceCategory($category, $description) {
         return $this->serviceCategory->createServiceCategory($category, $description);
     }
-    
+
 }
 
 // `updateServiceCategory.php` Script
@@ -22,7 +22,7 @@ if (isset($_POST['category']) && isset($_POST['description'])) {
 
     // Instantiate New Controller & Update User Account
     $controller = new CreateServiceCategoryController();
-    
+
     // If password is empty, replace password with null value
     // Entity will not update password field is password is NULL
     if ($_POST['description'] === "") {
@@ -30,12 +30,12 @@ if (isset($_POST['category']) && isset($_POST['description'])) {
     } else {
         $status = $controller->createServiceCategory($_POST['category'], $_POST['description']);
     }
-    
+
     // Display Success or Fail
     if ($status) {
         header("Location: ../createServiceCategory.php?status=1");
         exit();
-    
+
     } else {
         header("Location: ../createServiceCategory.php?status=0");
         exit();

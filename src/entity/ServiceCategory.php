@@ -3,15 +3,15 @@ require_once('Database.php');
 
 class ServiceCategory {
 
-    private int $id;
-    private string $category;
-    private string $description;
+    protected int $id;
+    protected string $category;
+    protected string $description;
 
     // CRUD Operations //
 
     //  Create ServiceCategory
     public function createServiceCategory(string $category, ?string $description): bool {
-    /*  Inserts New User Profile:
+    /*  Inserts New Service Category:
         $category: string
         $description: string
 
@@ -127,7 +127,7 @@ class ServiceCategory {
     }
 
     public function updateServiceCategory(int $id, string $category, ?string $description): bool {
-    /*  Updates a User Profile:
+    /*  Updates a Service Category:
 
         $id: int
         $category: string
