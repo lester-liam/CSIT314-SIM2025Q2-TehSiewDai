@@ -199,7 +199,7 @@ h2 {
 
 /* Table CSS Style */
 
-.user-table {
+.display-table {
     width: 100%;
     border-collapse: collapse;
     border-radius: 5px;
@@ -208,38 +208,38 @@ h2 {
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
 }
 
-.user-table td:last-child {
+.display-table td:last-child {
     text-align: right;
     display: flex;
     justify-content: flex-end;
 }
 
-.user-table button {
+.display-table button {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.user-table button + button {
+.display-table button + button {
     margin-left: 5px;
 }
 
 
-.user-table thead {
+.display-table thead {
     background-color: #ADCDC8;
     font-weight: bold;
     color: #16423C;
 }
 
-.user-table th,
-.user-table td {
+.display-table th,
+.display-table td {
     padding: 12px 16px;
     text-align: left;
     border-bottom: 0.5px solid #4B827B;
     color: #16423C;
 }
 
-.user-table .suspended-yes {
+.display-table .suspended-yes {
     color: #B22222;
     font-weight: bold;
 }

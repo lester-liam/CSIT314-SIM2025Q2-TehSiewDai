@@ -29,7 +29,7 @@ class Shortlist
             $stmt->bindParam(":serviceID", $serviceID);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -75,7 +75,7 @@ class Shortlist
             $stmt->bindParam(":homeownerID", $homeownerID);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -121,7 +121,7 @@ class Shortlist
             $stmt->bindParam(":serviceID", $serviceID);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -171,7 +171,7 @@ class Shortlist
             $stmt->bindParam(":searchTerm", $searchTerm);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {

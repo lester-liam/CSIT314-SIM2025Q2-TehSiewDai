@@ -93,7 +93,7 @@ if (isset($_GET['q'])) {
           <ion-icon name="search-outline"></ion-icon>
           <input type="text" id="search_term" type="text" placeholder="Search..." value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
         </div>
-        <button onclick='search()' class="search-button">Search</button>
+        <button onclick='searchBtnClicked()' class="search-button">Search</button>
       </div>
       <button onclick='window.location.href="selectCleanerServiceCategory.php"' class="create-button">
         <ion-icon name="add-outline"></ion-icon>
@@ -102,7 +102,7 @@ if (isset($_GET['q'])) {
     </div>
 
     <!-- User Table -->
-    <table class="user-table">
+    <table class="display-table">
       <thead>
         <tr>
           <th>ID</th>
@@ -171,7 +171,7 @@ if (isset($_GET['q'])) {
 
   <script>
 
-    function search() {
+    function searchBtnClicked() {
       var searchTermInput = document.getElementById("search_term");
       var searchTerm = searchTermInput.value;
 
@@ -195,12 +195,12 @@ if (isset($_GET['q'])) {
       // Modal
       const CleanerServiceModal = document.getElementById("CleanerServiceModal");
 
-      // Use fetch API (modern approach) or XMLHttpRequest (older approach)
-      fetch(`./controllers/ViewCleanerServiceController.php?id=${id}&cleanerID=${cleanerID}&includeMetrics=1`) // Replace with your PHP script URL
-            .then(response => response.json()) // Or response.text() if you're not expecting JSON
+      // Use Fetch
+      fetch(`./controllers/ViewCleanerServiceController.php?id=${id}&cleanerID=${cleanerID}&includeMetrics=1`)
+            .then(response => response.json())
             .then(data => {
 
-              // Populate the modal with the data received from PHP
+              // Use Reponse Data to Populate Fields
               document.getElementById('id').value = data.id;
               document.getElementById('category').value = data.category;
               document.getElementById('serviceName').value = data.serviceName;

@@ -86,7 +86,7 @@ if (isset($_GET['q'])) {
           <ion-icon name="search-outline"></ion-icon>
           <input id="search_term" type="text" placeholder="Search..." value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
         </div>
-        <button onclick='search()' class="search-button">Search</button>
+        <button onclick='searchBtnClicked()' class="search-button">Search</button>
       </div>
       <button onclick='window.location.href="createUserAccount.php"' class="create-button">
         <ion-icon name="add-outline"></ion-icon>
@@ -95,7 +95,7 @@ if (isset($_GET['q'])) {
     </div>
 
     <!-- User Table -->
-    <table class="user-table">
+    <table class="display-table">
       <thead>
         <tr>
           <th>ID</th>
@@ -127,7 +127,7 @@ if (isset($_GET['q'])) {
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script>
-    function search() {
+    function searchBtnClicked() {
       var searchTermInput = document.getElementById("search_term");
       var searchTerm = searchTermInput.value;
 

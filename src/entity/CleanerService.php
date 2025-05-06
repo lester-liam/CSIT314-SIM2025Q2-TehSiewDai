@@ -54,7 +54,7 @@ class CleanerService {
 
             $execResult = $stmt->execute();
 
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // Insert Success ?
             if ($execResult) {
@@ -99,7 +99,7 @@ class CleanerService {
             $stmt->bindParam(':cleanerID', $cleanerID);
             $execResult = $stmt->execute();
 
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -136,7 +136,7 @@ class CleanerService {
                                      ");
             $stmt->bindParam(':cleanerID', $cleanerID);
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -191,7 +191,7 @@ class CleanerService {
 
             $execResult = $stmt->execute();
 
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // Insert Success ?
             if ($execResult) {
@@ -226,7 +226,7 @@ class CleanerService {
 
             $execResult = $stmt->execute();
 
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // Insert Success ?
             if ($execResult) {
@@ -274,7 +274,7 @@ class CleanerService {
             $stmt->bindParam(':cleanerID', $cleanerID);
             $stmt->bindParam(':term', $searchTerm);
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // Search Success ?
             if ($execResult) {
@@ -308,7 +308,7 @@ class CleanerService {
                                      ");
             $execResult = $stmt->execute();
 
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -346,7 +346,7 @@ class CleanerService {
                                      ");
             $execResult = $stmt->execute();
 
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -383,7 +383,7 @@ class CleanerService {
                                         LEFT JOIN `ServiceCategory` sc ON cs.serviceCategoryID = sc.id
                                     ");
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -435,7 +435,7 @@ class CleanerService {
                 return $cleanerService;
 
             } else {
-                unset($db_handle); // Delete DB Conn
+                unset($db_handle); // Disconnect DB Conn
                 return null;
             }
 
@@ -473,7 +473,7 @@ class CleanerService {
                                     ");
             $stmt->bindParam(":searchTerm", $searchTerm);
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -521,7 +521,7 @@ class CleanerService {
             $stmt = $db_conn->prepare($sql);
             $stmt->bindParam(":id", $this->id);
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if (!$execResult) {
@@ -549,7 +549,7 @@ class CleanerService {
             $stmt = $db_conn->prepare($sql);
             $stmt->bindParam(":id", $serviceID);
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if (!$execResult) {

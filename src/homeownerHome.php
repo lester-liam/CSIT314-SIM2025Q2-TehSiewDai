@@ -106,7 +106,7 @@ if (isset($_GET['q'])) {
           <ion-icon name="search-outline"></ion-icon>
           <input type="text" id="search_term" type="text" placeholder="Search..." value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
         </div>
-        <button onclick='search()' class="search-button">Search</button>
+        <button onclick='searchBtnClicked()' class="search-button">Search</button>
       </div>
     </div>
 
@@ -195,8 +195,8 @@ if (isset($_GET['q'])) {
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
   <script>
-    
-    function search() {
+
+    function searchBtnClicked() {
 
       var searchTermInput = document.getElementById("search_term");
       var searchTerm = searchTermInput.value;

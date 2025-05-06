@@ -78,14 +78,14 @@ INSERT INTO UserProfile (id, role, description, isSuspend) VALUES
 (4, "Homeowner", "For homeowners to access Cleaner Services.", 0);
 
 INSERT INTO UserAccount (id, username, password, fullName, email, phone, userProfile, isSuspend) VALUES
-(1, 'u1', md5('u1'), 'Adam', 'adam@example.com', '43202034', 'User Admin', 0),
-(2, 'pm1', md5('pm1'), 'Clara', 'clara@example.com', '98620160', 'Platform Management', 0),
-(3, 'c1', md5('c1'), 'John', 'john@example.com', '78515250', 'Cleaner', 0),
-(4, 'c2', md5('c2'), 'Lora', 'lora@example.com', '98645160', 'Cleaner', 0),
-(5, 'c3', md5('c3'), 'Jake', 'jake@example.com', '98698160', 'Cleaner', 0),
-(6, 'ho1', md5('ho1'), 'Kelly', 'kelly@example.com', '24666160', 'Homeowner', 0),
-(7, 'ho2', md5('ho2'), 'Alex', 'alex@example.com', '45666160', 'Homeowner', 0),
-(8, 'ho3', md5('ho3'), 'Steve', 'steve@example.com', '45976160', 'Homeowner', 0);
+(1, 'u1', md5('u1'), 'Adam Mayer', 'adam.mayer@example.com', '43202034', 'User Admin', 0),
+(2, 'pm1', md5('pm1'), 'Clara Ho', 'clara.h@example.com', '98620160', 'Platform Management', 0),
+(3, 'c1', md5('c1'), 'John Doe', 'john.doe@example.com', '78515250', 'Cleaner', 0),
+(4, 'c2', md5('c2'), 'Lora Emma', 'lora.em1@example.com', '98645160', 'Cleaner', 0),
+(5, 'c3', md5('c3'), 'Jake Browns', 'jakebrowns@example.com', '98698160', 'Cleaner', 0),
+(6, 'ho1', md5('ho1'), 'Kelly Clarkson', 'k.clarkson@example.com', '24666160', 'Homeowner', 0),
+(7, 'ho2', md5('ho2'), 'Alexander Joe', 'j.alex@example.com', '45666160', 'Homeowner', 0),
+(8, 'ho3', md5('ho3'), 'Steve', 'ssteve@example.com', '45976160', 'Homeowner', 0);
 
 INSERT INTO ServiceCategory (category, description) VALUES
 ('Deep Cleaning Service', 'For Specialized Cleaning Services'),

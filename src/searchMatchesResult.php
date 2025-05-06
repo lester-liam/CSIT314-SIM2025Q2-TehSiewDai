@@ -55,7 +55,6 @@ if (
       $category = "";
     }
 
-
     // Convert dateOption to integer
     $dateOption = (int) $_GET['dateOption'];
 
@@ -116,7 +115,7 @@ if (
     </div>
 
     <!-- Table -->
-    <table class="user-table">
+    <table class="display-table">
       <thead>
         <tr>
           <th>ID</th>

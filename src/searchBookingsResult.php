@@ -114,7 +114,7 @@ if (
     </div>
 
     <!-- Table -->
-    <table class="user-table">
+    <table class="display-table">
       <thead>
         <tr>
           <th>ID</th>

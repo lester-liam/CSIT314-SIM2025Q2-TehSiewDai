@@ -74,7 +74,7 @@ class ServiceHistory
             $stmt->bindParam(':searchTerm', $searchTerm);
             $stmt->bindParam(':category', $category);
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -107,7 +107,7 @@ class ServiceHistory
             $stmt->bindParam(':cleanerID', $cleanerID);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -139,7 +139,7 @@ class ServiceHistory
             $stmt->bindParam(':cleanerID', $cleanerID);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -218,7 +218,7 @@ class ServiceHistory
             $stmt->bindParam(':searchTerm', $searchTerm);
             $stmt->bindParam(':category', $category);
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -251,7 +251,7 @@ class ServiceHistory
             $stmt->bindParam(':homeownerID', $homeownerID);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
@@ -283,7 +283,7 @@ class ServiceHistory
             $stmt->bindParam(':homeownerID', $homeownerID);
 
             $execResult = $stmt->execute();
-            unset($db_handle); // Delete DB Conn
+            unset($db_handle); // Disconnect DB Conn
 
             // execute() Success?
             if ($execResult) {
