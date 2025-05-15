@@ -1,59 +1,49 @@
 <?php
 
-define('__ROOT__', '/var/www/html');
+require_once("/var/www/html/entity/CleanerService.php");
 
-require_once(__ROOT__ . '/entity/CleanerService.php');
-require_once(__ROOT__ . '/controllers/ServiceViewController.php');
-require_once(__ROOT__ . '/controllers/ServiceShortlistController.php');
-
-class ViewCleanerServiceController {
-
+class ViewCleanerServiceController
+{
     private $cleanerService;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cleanerService = new CleanerService();
     }
 
-    // Returns Cleaner Service
-    public function viewCleanerService($int, $cleanerID) {
-        return $this->cleanerService->viewCleanerService($int, $cleanerID);
+    public function viewCleanerService(int $id, int $cleanerID): ?CleanerService
+    {
+        return $this->cleanerService->viewCleanerService($id, $cleanerID);
     }
 }
 
-
-if (isset($_GET['id']) && isset($_GET['cleanerID']) && isset($_GET['includeMetrics'])) {
-
+/**
+ * Script to handle the request of View Service.
+ * Expects a GET request with 'id' and 'cleanerID'
+ */
+if (isset($_GET['id']) && isset($_GET['cleanerID'])) {
+    // Convert String IDs to Integer
     $id = (int) $_GET['id'];
     $cleanerID = (int) $_GET['cleanerID'];
 
+    // Instantiate Controller
     $viewController = new ViewCleanerServiceController();
-    $numViewsController = new ServiceViewController();
-    $numShortlistsController = new ServiceShortlistController();
-
     $service = $viewController->viewCleanerService($id, $cleanerID);
 
+    // Error Getting Service
     if (is_null($service)) {
         echo json_encode(['error' => 'Invalid request']);
         exit();
     }
 
-    $numViews = $numViewsController->getCleanerServiceViews($id);
-    $numShortlists = $numShortlistsController->getCleanerServiceShortlists($id);
-
-    // Prepare data to send back to JavaScript
+    // Parse & Send Response as JSON
     $response = [
         'id' => $service->getId(),
         'category' => $service->getCategory(),
         'serviceName' => $service->getServiceName(),
         'price' => $service->getPrice(),
-        'numViews' => $numViews,
-        'numShortlists' => $numShortlists,
     ];
-
-    // Send the response as JSON
     header('Content-Type: application/json');
     echo json_encode($response);
     exit();
 }
-
-?>

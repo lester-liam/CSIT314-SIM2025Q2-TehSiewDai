@@ -26,31 +26,15 @@ $homeownerID = (int) $_SESSION['id'];
 
 // Retrieve GET Variables
 if (
-    isset($_GET['searchTerm']) &&
     isset($_GET['category']) &&
     isset($_GET['dateOption'])
 ) {
     $controller = new SearchBookingsController();
 
-    // Remove Quotes & Decode URL (Eg. %20 for Whitespaces)
-    $searchTermWithoutQuotes = str_replace(['"', "'"], '', $_GET['searchTerm']);
-    $searchTerm = urldecode($searchTermWithoutQuotes);
-
-    // Remove 2 or more consecutive whitespaces
-    $searchTerm = preg_replace('/\s{2,}/', ' ', $searchTerm);
-
-    // Remove trailing whitespaces
-    $searchTerm = ltrim($searchTerm);
-    $searchTerm = rtrim($searchTerm);
-
     $categoryWithoutQuotes = str_replace(['"', "'"], '', $_GET['category']);
     $category = urldecode($categoryWithoutQuotes);
 
     // Handle Empty Cases
-    if (empty($category)) {
-      $searchTerm = "";
-    }
-
     if (empty($category)) {
       $category = "";
     }
@@ -61,7 +45,6 @@ if (
 
     $bookings = $controller->searchBookings(
                                 $homeownerID,
-                                $searchTerm,
                                 $category,
                                 $dateOption
                             );

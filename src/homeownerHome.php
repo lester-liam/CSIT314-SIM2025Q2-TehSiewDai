@@ -244,7 +244,7 @@ if (isset($_GET['q'])) {
     function shortlistService(serviceID, homeownerID) {
       if (confirm("Confirm Shortlist?") == true) {
         // Use fetch API (modern approach) or XMLHttpRequest (older approach)
-        fetch(`./controllers/ShortlistServiceController.php?homeownerID=${homeownerID}&serviceID=${serviceID}`) // Replace with your PHP script URL
+        fetch(`./controllers/NewShortlistController.php?homeownerID=${homeownerID}&serviceID=${serviceID}`) // Replace with your PHP script URL
               .then(response => response.json()) // Or response.text() if you're not expecting JSON
               .then(data => {
 

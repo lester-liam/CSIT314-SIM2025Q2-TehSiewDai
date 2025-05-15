@@ -1,19 +1,18 @@
 <?php
 
-require_once '/var/www/html/entity/Shortlist.php';
+require_once ("/var/www/html/entity/Shortlist.php");
 
-class ViewAllShortlistController {
-
+class ViewAllShortlistController
+{
     private $shortlist;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->shortlist = new Shortlist();
     }
 
-    // Returns All User Profiles
-    public function viewAllShortlist($homeownerID) {
+    public function viewAllShortlist(int $homeownerID): ?array
+    {
         return $this->shortlist->viewAllShortlist($homeownerID);
     }
 }
-
-?>

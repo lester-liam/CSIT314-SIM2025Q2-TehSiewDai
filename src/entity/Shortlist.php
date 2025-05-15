@@ -107,8 +107,7 @@ class Shortlist
                         sc.category AS category,
                         ua.fullName AS cleanerName,
                         cs.price AS price,
-                        cs.serviceName AS serviceName,
-                        cs.cleanerID AS cleanerID
+                        cs.serviceName AS serviceName
                     FROM Shortlist s
                     LEFT JOIN CleanerService cs ON s.serviceID = cs.id
                     LEFT JOIN ServiceCategory sc ON cs.serviceCategoryID = sc.id
@@ -125,6 +124,9 @@ class Shortlist
 
             // execute() Success?
             if ($execResult) {
+                // Increment CleanerService View Count
+                $cleanerServiceObject = new CleanerService();
+                $cleanerServiceObject->incrementViewCount($serviceID);
                 return $stmt->fetchObject('Shortlist');
             } else {
                 return null;
@@ -155,8 +157,7 @@ class Shortlist
                         sc.category AS category,
                         ua.fullName AS cleanerName,
                         cs.price AS price,
-                        cs.serviceName AS serviceName,
-                        cs.cleanerID AS cleanerID
+                        cs.serviceName AS serviceName
                     FROM Shortlist s
                     LEFT JOIN CleanerService cs ON s.serviceID = cs.id
                     LEFT JOIN ServiceCategory sc ON cs.serviceCategoryID = sc.id

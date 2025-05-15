@@ -1,19 +1,18 @@
 <?php
 
-require_once('/var/www/html/entity/ServiceHistory.php');
+require_once("/var/www/html/entity/ServiceHistory.php");
 
-class ViewMatchesController {
-
+class ViewMatchesController
+{
     private $serviceHistory;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->serviceHistory = new ServiceHistory();
     }
 
-    // Returns All User Profiles
-    public function viewMatches($cleanerID) {
+    public function viewMatches(int $cleanerID): ?array
+    {
         return $this->serviceHistory->viewMatches($cleanerID);
     }
 }
-
-?>

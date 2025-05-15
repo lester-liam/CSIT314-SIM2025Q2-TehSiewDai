@@ -11,6 +11,7 @@ services:
   server:
     build:
       context: .
+      target: development
     ports:
       - 9000:80
     depends_on:
@@ -26,6 +27,10 @@ services:
         - action: sync
           path: ./src
           target: /var/www/html
+          
+        - action: sync
+          path: ./tests
+          target: /var/www/html/tests
   db:
     image: mariadb:10.11
     restart: always

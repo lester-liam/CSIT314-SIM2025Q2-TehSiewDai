@@ -1,6 +1,6 @@
 <?php
 
-require_once "/var/www/html/entity/ServiceCategory.php";
+require_once("/var/www/html/entity/ServiceCategory.php");
 
 class CreateServiceCategoryController
 {
@@ -22,7 +22,6 @@ class CreateServiceCategoryController
  * Expects a POST request with 'category' and 'description' parameters.
  */
 if (isset($_POST['category']) && isset($_POST['description'])) {
-
     // Instantiate New Controller
     $controller = new CreateServiceCategoryController();
 

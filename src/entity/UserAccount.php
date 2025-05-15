@@ -252,7 +252,7 @@ class UserAccount {
     }
 
 
-    public function login(string $username, string $password, string $userProfile): ?UserAccount {
+    public function login(string $username, string $password, string $userProfile, ?PDO $mockDb): ?UserAccount {
     /*  Login (Authenticate) UserAccount
         Checks for UserAccount (UA) Exists, Authenticate Password,
         Then Checks if UserProfile or UA  is Suspended
@@ -265,8 +265,12 @@ class UserAccount {
     */
 
         // New DB Conn
-        $db_handle = new Database();
-        $db_conn = $db_handle->getConnection();
+        if (is_null($mockDb)) {
+            $db_handle = new Database();
+            $db_conn = $db_handle->getConnection();
+        } else {
+            $db_conn = $mockDb;
+        }
 
         // SQL Statement (+ Checks user profile isSuspend status)
         // Returns NULL if Invalid Password / No Users Found

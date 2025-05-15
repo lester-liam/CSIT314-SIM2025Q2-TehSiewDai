@@ -1,48 +1,45 @@
 <?php
-require_once "../entity/UserProfile.php";
 
-class UpdateUserProfileController {
-    
+require_once("/var/www/html/entity/UserProfile.php");
+
+class UpdateUserProfileController
+{
     private $userProfile;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userProfile = new UserProfile();
     }
 
-    // Update User Account, Returns Boolean Value (Success/Fail)
-    public function updateUserProfile($id, $role, $description) {
+    public function updateUserProfile(int $id, string $role, string $description): bool
+    {
         return $this->userProfile->updateUserProfile($id, $role, $description);
     }
-    
 }
 
-// `updateUserProfile.php` Script
-// Executes when Update User Profile Form is Submitted (POST Request)
+/**
+ * Script to handle the submission of the Update User Profile Form.
+ * Expects a POST request with `id`, 'role' and 'description'
+ */
 if (isset($_POST['id']) && isset($_POST['role']) && isset($_POST['description'])) {
-    
-    // Convert string ID to integer
+    // Convert String ID to Integer
     $id = (int) $_POST['id'];
 
-    // Instantiate New Controller & Update User Account
+    // Instantiate New Controller
     $controller = new UpdateUserProfileController();
     $status = $controller->updateUserProfile($id, $_POST['role'], $_POST['description']);
 
-    // Display Success or Fail
+    // Redirect back to the form with status message
     if ($status) {
         header("Location: ../updateUserProfile.php?id=$id&status=1");
         exit();
-    
+
     } else {
         header("Location: ../updateUserProfile.php?id=$id&status=0");
         exit();
     }
-
 } else {
-
     $id = (int) $_POST['id'];
     header("Location: ../updateUserProfile.php?id=$id&status=0");
     exit();
-
 }
-
-?>

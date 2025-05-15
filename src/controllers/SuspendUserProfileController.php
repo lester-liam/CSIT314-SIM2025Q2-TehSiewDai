@@ -1,50 +1,44 @@
 <?php
-require_once "../entity/UserProfile.php";
 
-session_start();
+require_once("/var/www/html/entity/UserProfile.php");
 
-class SuspendUserProfileController {
-    
+class SuspendUserProfileController
+{
     private $userProfile;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userProfile = new UserProfile();
     }
 
-    // Suspend User Profile, Returns a Boolean Value (Success/Fail)
-    public function suspendUserProfile($id) {
+    public function suspendUserProfile(int $id): bool
+    {
         return $this->userProfile->suspendUserProfile($id);
     }
-
 }
 
-// `updateUserAccount.php` Script
-// Executes when Suspend User Profile Button is Click (GET Request)
+/**
+ * Script to handle the request of Suspend User Profile
+ * Expects a GET request with 'id'
+ */
 if (isset($_GET['id'])) {
-    
-    // Convert ID to Integer Value
+    // Convert String ID to Integer Value
     $id = (int) $_GET['id'];
-    
-    // Instantiate New Controller & Suspend User
+
+    // Instantiate New Controller
     $controller = new SuspendUserProfileController();
     $status = $controller->suspendUserProfile($id);
 
-    // Display Success or Fail
+    // Redirect back to the form with status message
     if ($status) {
         header("Location: ../updateUserProfile.php?id=$id&status=1");
         exit();
-    
     } else {
         header("Location: ../updateUserProfile.php?id=$id&status=0");
         exit();
     }
-    
 } else {
-
     $id = (int) $_GET['id'];
     header("Location: ../updateUserProfile.php?id=$id&status=0");
     exit();
-
 }
-
-?>

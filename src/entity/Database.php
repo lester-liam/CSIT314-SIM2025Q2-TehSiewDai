@@ -16,5 +16,3 @@ class Database {
         $this->db_conn = null;
     }
 }
-
-?>

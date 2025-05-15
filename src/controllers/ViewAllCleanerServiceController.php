@@ -1,18 +1,18 @@
 <?php
-require_once "entity/CleanerService.php";
 
-class ViewAllCleanerServiceController {
+require_once("/var/www/html/entity/CleanerService.php");
 
+class ViewAllCleanerServiceController
+{
     private $cleanerService;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cleanerService = new CleanerService();
     }
 
-    // Returns All User Profiles
-    public function viewAllCleanerService($cleanerID) {
+    public function viewAllCleanerService(int $cleanerID): ?array
+    {
         return $this->cleanerService->viewAllCleanerService($cleanerID);
     }
 }
-
-?>

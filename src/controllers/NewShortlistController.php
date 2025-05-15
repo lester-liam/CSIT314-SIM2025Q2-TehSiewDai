@@ -1,34 +1,36 @@
 <?php
 
-require_once('/var/www/html/entity/Shortlist.php');
+require_once("/var/www/html/entity/Shortlist.php");
 
-class ShortlistServiceController {
-
+class NewShortlistController
+{
     private $shortlist;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->shortlist = new Shortlist();
     }
 
-    // Delete Cleaner Service
-    public function newShortlist($homeownerID, $serviceID) {
+    public function newShortlist(int $homeownerID, int $serviceID): bool
+    {
         return $this->shortlist->newShortlist($homeownerID, $serviceID);
     }
 }
 
-// `updateCleanerService.php` Script
-// Executes when Delete Button is Click (GET Request)
+/**
+ * Script to handle the request of the Shortlisting Service
+ * Expects a GET request with 'homeownerID' and 'serviceID'
+ */
 if (isset($_GET['homeownerID']) && isset($_GET['serviceID'])) {
-
-    // Convert ID to Integer Value
+    // Convert String IDs to Integer
     $homeownerID = (int) $_GET['homeownerID'];
     $serviceID = (int) $_GET['serviceID'];
 
-    // Instantiate New Controller & Delete
-    $controller = new ShortlistServiceController();
+    // Instantiate New Controller
+    $controller = new NewShortlistController();
     $status = $controller->newShortlist($homeownerID, $serviceID);
 
-    // Success / Fail
+    // Parse Success/Fail Response
     if ($status) {
         $response = [
             'isSuccess' => true,
@@ -39,9 +41,8 @@ if (isset($_GET['homeownerID']) && isset($_GET['serviceID'])) {
         ];
     }
 
-    // Send the response as JSON
+    // Send Response as JSON
     header('Content-Type: application/json');
     echo json_encode($response);
     exit();
 }
-?>

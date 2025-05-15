@@ -1,18 +1,18 @@
 <?php
-require_once "entity/ServiceHistory.php";
 
-class MatchCategoryController {
+require_once("/var/www/html/entity/ServiceHistory.php");
 
+class MatchCategoryController
+{
     private $serviceHistory;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->serviceHistory = new ServiceHistory();
     }
 
-    // Returns All User Profiles
-    public function getCategories($cleanerID) {
+    public function getCategories(int $cleanerID): ?array
+    {
         return $this->serviceHistory->getCategories($cleanerID);
     }
 }
-
-?>

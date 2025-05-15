@@ -1,19 +1,18 @@
 <?php
 
-require_once('/var/www/html/entity/ServiceHistory.php');
+require_once("/var/www/html/entity/ServiceHistory.php");
 
-class ViewBookingsController {
-
+class ViewBookingsController
+{
     private $serviceHistory;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->serviceHistory = new ServiceHistory();
     }
 
-    // Returns All User Profiles
-    public function viewBookings($homeownerID) {
+    public function viewBookings(int $homeownerID): ?array
+    {
         return $this->serviceHistory->viewBookings($homeownerID);
     }
 }
-
-?>

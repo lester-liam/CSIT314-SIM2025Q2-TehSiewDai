@@ -1,6 +1,6 @@
 <?php
 
-require_once "/var/www/html/entity/ServiceCategory.php";
+require_once("/var/www/html/entity/ServiceCategory.php");
 
 class SearchServiceCategoryController
 {

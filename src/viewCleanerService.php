@@ -195,26 +195,45 @@ if (isset($_GET['q'])) {
       // Modal
       const CleanerServiceModal = document.getElementById("CleanerServiceModal");
 
-      // Use Fetch
-      fetch(`./controllers/ViewCleanerServiceController.php?id=${id}&cleanerID=${cleanerID}&includeMetrics=1`)
-            .then(response => response.json())
-            .then(data => {
+      // Fetch Cleaner Service Details
+      fetch(`./controllers/ViewCleanerServiceController.php?id=${id}&cleanerID=${cleanerID}`)
+        .then(response => response.json())
+        .then(data => {
 
-              // Use Reponse Data to Populate Fields
-              document.getElementById('id').value = data.id;
-              document.getElementById('category').value = data.category;
-              document.getElementById('serviceName').value = data.serviceName;
-              document.getElementById('price').value = data.price;
-              document.getElementById('numViews').value = data.numViews;
-              document.getElementById('numShortlists').value = data.numShortlists;
-
-        CleanerServiceModal.style.display = "block";
+          // Use Reponse Data to Populate Fields
+          document.getElementById('id').value = data.id;
+          document.getElementById('category').value = data.category;
+          document.getElementById('serviceName').value = data.serviceName;
+          document.getElementById('price').value = data.price;
       })
       .catch(error => {
         console.error("Error fetching service data:", error);
         alert(error.message)
       });
 
+      // Fetch Service View Count
+      fetch(`./controllers/GetViewCountController.php?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('numViews').value = data.numViews;
+      })
+      .catch(error => {
+        console.error("Error fetching service data:", error);
+        alert(error.message)
+      });
+
+      // Fetch Service View Count
+      fetch(`./controllers/GetShortlistCountController.php?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('numShortlists').value = data.numShortlists;
+      })
+      .catch(error => {
+        console.error("Error fetching service data:", error);
+        alert(error.message)
+      });
+
+      CleanerServiceModal.style.display = "block";
     }
 
   </script>

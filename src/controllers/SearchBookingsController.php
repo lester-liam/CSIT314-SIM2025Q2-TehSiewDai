@@ -1,28 +1,25 @@
 <?php
 
-require_once('/var/www/html/entity/ServiceHistory.php');
+require_once("/var/www/html/entity/ServiceHistory.php");
 
-class SearchBookingsController {
-
+class SearchBookingsController
+{
     private $serviceHistory;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->serviceHistory = new ServiceHistory();
     }
 
-    // Search User Account, Return Array[0 to Many] of User Profiles
     public function searchBookings(
-        $homeownerID,
-        $searchTerm,
-        $category,
-        $dateOption
-    ) {
+        int $homeownerID,
+        string $category,
+        int $dateOption
+    ): ?array {
         return $this->serviceHistory->searchBookings(
-                                        $homeownerID,
-                                        $searchTerm,
-                                        $category,
-                                        $dateOption
-                                      );
+            $homeownerID,
+            $category,
+            $dateOption
+        );
     }
 }
-?>

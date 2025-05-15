@@ -1,6 +1,6 @@
 <?php
 
-require_once "/var/www/html/entity/ServiceCategory.php";
+require_once("/var/www/html/entity/ServiceCategory.php");
 
 class DeleteServiceCategoryController
 {
@@ -24,9 +24,11 @@ class DeleteServiceCategoryController
 if (isset($_GET['id'])) {
     // Convert string ID to integer
     $id = (int) $_GET['id'];
+
     // Instantiate New Controller
     $controller = new DeleteServiceCategoryController();
     $status = $controller->deleteServiceCategory($id);
+
     // Alert Status Message, then Redirect to Page
     if ($status) {
         echo '<script>

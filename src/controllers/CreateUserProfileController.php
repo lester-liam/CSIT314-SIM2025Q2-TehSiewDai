@@ -1,30 +1,32 @@
 <?php
-require_once "../entity/UserProfile.php";
 
-class CreateUserProfileController {
+require_once("/var/www/html/entity/UserProfile.php");
 
+class CreateUserProfileController
+{
     private $userProfile;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userProfile = new UserProfile();
     }
 
-    // Create User Account, Returns a Boolean Value (Success/Fail)
-    public function createUserProfile($role, $description) {
+    public function createUserProfile(string $role, string $description): bool
+    {
         return $this->userProfile->createUserProfile($role, $description);
     }
-
 }
 
-// `createUserProfile.php` Script
-// Executes when Create User Profile Form is Submitted (POST Request)
+/**
+ * Script to handle the submission of the Create UserProfile form.
+ * Expects a POST request with 'role' and 'description'
+ */
 if (isset($_POST['role']) && isset($_POST['description'])) {
-
-    // Instantiate New Controller & Create User Profile
+    // Instantiate New Controller
     $controller = new CreateUserProfileController();
     $status = $controller->createUserProfile($_POST['role'], $_POST['description']);
 
-    // Display Success or Fail
+    // Redirect back to the form with status message
     if ($status) {
         header("Location: ../createUserProfile.php?status=1");
         exit();
@@ -32,7 +34,4 @@ if (isset($_POST['role']) && isset($_POST['description'])) {
         header("Location: ../createUserProfile.php?status=0");
         exit();
     }
-
 }
-
-?>

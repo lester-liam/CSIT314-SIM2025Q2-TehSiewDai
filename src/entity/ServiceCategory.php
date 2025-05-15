@@ -239,7 +239,10 @@ class ServiceCategory
             $searchTerm = "%" . $searchTerm . "%";
 
             // Bind Parameters
-            $stmt = $db_conn->prepare("SELECT * FROM `ServiceCategory` WHERE `category` LIKE :term OR `description` LIKE :term");
+            $stmt = $db_conn->prepare(
+                "SELECT * FROM `ServiceCategory`
+                WHERE `category` LIKE :term OR `description` LIKE :term"
+            );
             $stmt->bindParam(':term', $searchTerm);
 
             // Execute Statement

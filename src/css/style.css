@@ -209,7 +209,6 @@ h2 {
 }
 
 .display-table td:last-child {
-    text-align: right;
     display: flex;
     justify-content: flex-end;
 }

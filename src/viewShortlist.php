@@ -110,8 +110,8 @@ if (isset($_GET['q'])) {
           echo '    <strong>' . htmlspecialchars(($cs->getCategory())) . '</strong>';
           echo '    <p>' . htmlspecialchars(($cs->getCleanerName())) . '</p>';
           echo '    <button onclick="viewService(' .
-                                        $cs->getHomeownerID() . ', ' .
-                                        $cs->getServiceID() . ')"' .
+                                        htmlspecialchars($cs->getHomeownerID()) . ', ' .
+                                        htmlspecialchars($cs->getServiceID()) . ');"' .
                                         ' class="submit-button">View</button>';
           echo '  </div>';
           echo '</div>';
@@ -191,11 +191,11 @@ if (isset($_GET['q'])) {
 
       // Modal
       const CleanerServiceModal = document.getElementById("ViewServiceModal");
-
+      console.log(`./controllers/ViewShortlistController.php?homeownerID=${homeownerID}&serviceID=${serviceID}`);
       // Use fetch API (modern approach) or XMLHttpRequest (older approach)
       fetch(`./controllers/ViewShortlistController.php?homeownerID=${homeownerID}&serviceID=${serviceID}`) // Replace with your PHP script URL
-            .then(response => response.json()) // Or response.text() if you're not expecting JSON
-            .then(data => {
+        .then(response => response.json())
+        .then(data => {
 
               // Populate the modal with the data received from PHP
               document.getElementById('category').value = data.category;

@@ -35,7 +35,7 @@ if ($_SESSION['userProfile'] != "Platform Management") {
     <div class="navbar-left">
       <img src='img/cleaning-logo.png' alt="Cleaning Logo" width='48px' height='48px'/>
       <a href="viewServiceCategory.php" class="active">Services</a>
-      <a href="#">Report</a>
+      <a href="viewReport.php">Report</a>
     </div>
     <div class="navbar-right">
       <span class="navbar-right-text">Logged in as,<br/>

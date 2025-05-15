@@ -154,10 +154,6 @@ $categories = $controller2 -> getHoCategories($homeownerID);
       <div class="modal-body">
       <form action="searchBookingsResult.php" method="GET">
         <div class="form-group">
-          <label for="searchTerm">Search Text:</label>
-          <input type="text" id="searchTerm" name="searchTerm" placeholder="Optional Search By Text">
-        </div>
-        <div class="form-group">
           <label for="category">Search Category:</label>
           <?php
             if (empty($categories)) {

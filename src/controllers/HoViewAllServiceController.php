@@ -1,19 +1,18 @@
 <?php
 
-require_once '/var/www/html/entity/CleanerService.php';
+require_once("/var/www/html/entity/CleanerService.php");
 
-class HoViewAllServiceController {
-
+class HoViewAllServiceController
+{
     private $cleanerService;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cleanerService = new CleanerService();
     }
 
-    // Returns All User Profiles
-    public function hoViewAllService() {
+    public function hoViewAllService(): ?array
+    {
         return $this->cleanerService->hoViewAllService();
     }
 }
-
-?>

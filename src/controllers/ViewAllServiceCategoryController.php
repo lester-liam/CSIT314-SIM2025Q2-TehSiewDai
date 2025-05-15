@@ -1,18 +1,18 @@
 <?php
-require_once "entity/ServiceCategory.php";
 
-class ViewAllServiceCategoryController {
-    
+require_once("/var/www/html/entity/ServiceCategory.php");
+
+class ViewAllServiceCategoryController
+{
     private $serviceCategory;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->serviceCategory = new ServiceCategory();
     }
 
-    // Returns All Service Category
-    public function readAllServiceCategory() {
+    public function readAllServiceCategory(): ?array
+    {
         return $this->serviceCategory->readAllServiceCategory();
     }
 }
-
-?>

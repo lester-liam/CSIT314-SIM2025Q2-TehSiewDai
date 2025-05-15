@@ -1,23 +1,40 @@
 <?php
-require_once "../entity/UserAccount.php";
 
-class CreateUserAccountController {
+require_once("/var/www/html/entity/UserAccount.php");
 
+class CreateUserAccountController
+{
     private $userAccount;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userAccount = new UserAccount();
     }
 
-    // Create User Account, Returns a Boolean Value (Success/Fail)
-    public function createUserAccount($username, $password, $fullName, $email, $phone, $userProfile) {
-        return $this->userAccount->createUserAccount($username, $password, $fullName, $email, $phone, $userProfile);
+    public function createUserAccount(
+        string $username,
+        string $password,
+        string $fullName,
+        string $email,
+        string $phone,
+        string $userProfile
+    ): bool {
+        return $this->userAccount->createUserAccount(
+            $username,
+            $password,
+            $fullName,
+            $email,
+            $phone,
+            $userProfile
+        );
     }
-
 }
 
-// `createUserAccount.php` Script
-// Executes when Create User Account Form is Submitted (POST Request)
+/**
+ * Script to handle the submission of the Create Service Category form.
+ * Expects a POST request with 'username', 'password', 'fullname', 'email'
+ * 'phone' and 'userProfile' parameters.
+ */
 if (
     isset($_POST['username']) &&
     isset($_POST['password']) &&
@@ -26,12 +43,18 @@ if (
     isset($_POST['phone']) &&
     isset($_POST['userProfile'])
 ) {
-
-    // Instantiate New Controller & Create Account
+    // Instantiate New Controller
     $controller = new CreateUserAccountController();
-    $status = $controller->createUserAccount($_POST['username'], $_POST['password'], $_POST['fullName'], $_POST['email'], $_POST['phone'], $_POST['userProfile']);
+    $status = $controller->createUserAccount(
+        $_POST['username'],
+        $_POST['password'],
+        $_POST['fullName'],
+        $_POST['email'],
+        $_POST['phone'],
+        $_POST['userProfile']
+    );
 
-    // Display Success or Fail
+    // Redirect back to the form with status message
     if ($status) {
         header("Location: ../createUserAccount.php?status=1");
         exit();
@@ -39,7 +62,4 @@ if (
         header("Location: ../createUserAccount.php?status=0");
         exit();
     }
-
 }
-
-?>

@@ -1,20 +1,18 @@
 <?php
 
-require_once '/var/www/html/entity/Shortlist.php';
+require_once("/var/www/html/entity/Shortlist.php");
 
-class SearchShortlistController {
-
+class SearchShortlistController
+{
     private $shortlist;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->shortlist = new Shortlist();
     }
 
-    // Search User Account, Return Array[0 to Many] of User Profiles
-    public function searchShortlist($homeownerID, $searchTerm) {
+    public function searchShortlist(int $homeownerID, string $searchTerm): ?array
+    {
         return $this->shortlist->searchShortlist($homeownerID, $searchTerm);
     }
-
 }
-
-?>

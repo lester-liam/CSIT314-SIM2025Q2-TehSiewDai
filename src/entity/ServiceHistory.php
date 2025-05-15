@@ -13,7 +13,6 @@ class ServiceHistory
 
     public function searchMatches(
         int $cleanerID,
-        string $searchTerm,
         string $category,
         int $dateOption
     ): ?array {
@@ -21,7 +20,6 @@ class ServiceHistory
             Searches for matching service history records based on the provided criteria.
 
             $cleanerID: int - The ID of the cleaner.
-            $searchTerm: string - The term to search for in the category.
             $category: string - The specific category to filter by (can be empty for all categories).
             $dateOption: int - Defines the date range for the search:
                 0: Past 7 Days
@@ -39,7 +37,6 @@ class ServiceHistory
         try {
 
             // Add Wildcard Search Operator
-            $searchTerm = "%" . $searchTerm . "%";
             $category = "%" . $category . "%";
 
             // SQL Statements by dateOptions
@@ -49,7 +46,7 @@ class ServiceHistory
                             FROM `ServiceHistory` sh
                             LEFT JOIN `UserAccount` ua ON sh.homeownerID = ua.id
                             WHERE sh.`cleanerID` = :cleanerID
-                            AND (ua.`fullName` LIKE :searchTerm AND sh.`category`LIKE :category)
+                            AND sh.`category`LIKE :category
                             AND sh.`serviceDate` >= CURDATE() - INTERVAL 7 DAY";
                     break;
                 case 1: // Past 30 Days
@@ -57,7 +54,7 @@ class ServiceHistory
                             FROM `ServiceHistory` sh
                             LEFT JOIN `UserAccount` ua ON sh.homeownerID = ua.id
                             WHERE sh.`cleanerID` = :cleanerID
-                            AND (ua.`fullName` LIKE :searchTerm AND sh.`category`LIKE :category)
+                            AND sh.`category`LIKE :category
                             AND sh.`serviceDate` >= CURDATE() - INTERVAL 30 DAY";
                     break;
                 case 2: // All Time
@@ -65,13 +62,12 @@ class ServiceHistory
                             FROM `ServiceHistory` sh
                             LEFT JOIN `UserAccount` ua ON sh.homeownerID = ua.id
                             WHERE sh.`cleanerID` = :cleanerID
-                            AND (ua.`fullName` LIKE :searchTerm AND sh.`category`LIKE :category)";
+                            AND sh.`category`LIKE :category";
                     break;
             }
 
             $stmt = $db_conn->prepare($sql);
             $stmt->bindParam(':cleanerID', $cleanerID);
-            $stmt->bindParam(':searchTerm', $searchTerm);
             $stmt->bindParam(':category', $category);
             $execResult = $stmt->execute();
             unset($db_handle); // Disconnect DB Conn
@@ -157,7 +153,6 @@ class ServiceHistory
 
     public function searchBookings(
         int $homeownerID,
-        string $searchTerm,
         string $category,
         int $dateOption
     ): ?array {
@@ -165,7 +160,6 @@ class ServiceHistory
             Searches for matching service history records based on the provided criteria.
 
             $cleanerID: int - The ID of the cleaner.
-            $searchTerm: string - The term to search for in the category.
             $category: string - The specific category to filter by (can be empty for all categories).
             $dateOption: int - Defines the date range for the search:
                 0: Past 7 Days
@@ -181,41 +175,39 @@ class ServiceHistory
 
         // SQL TryCatch Statement
         try {
-
             // Add Wildcard Search Operator
-            $searchTerm = "%" . $searchTerm . "%";
             $category = "%" . $category . "%";
 
+            // SQL Statements by dateOptions
             // SQL Statements by dateOptions
             switch ($dateOption) {
                 case 0: // Past 7 Days
                     $sql = "SELECT sh.*, ua.fullName AS name
                             FROM `ServiceHistory` sh
-                            LEFT JOIN `UserAccount` ua ON sh.cleanerID = ua.id
+                            LEFT JOIN `UserAccount` ua ON sh.homeownerID = ua.id
                             WHERE sh.`homeownerID` = :homeownerID
-                            AND (ua.`fullName` LIKE :searchTerm AND sh.`category`LIKE :category)
+                            AND sh.`category`LIKE :category
                             AND sh.`serviceDate` >= CURDATE() - INTERVAL 7 DAY";
                     break;
                 case 1: // Past 30 Days
                     $sql = "SELECT sh.*, ua.fullName AS name
                             FROM `ServiceHistory` sh
-                            LEFT JOIN `UserAccount` ua ON sh.cleanerID = ua.id
+                            LEFT JOIN `UserAccount` ua ON sh.homeownerID = ua.id
                             WHERE sh.`homeownerID` = :homeownerID
-                            AND (ua.`fullName` LIKE :searchTerm AND sh.`category`LIKE :category)
+                            AND sh.`category`LIKE :category
                             AND sh.`serviceDate` >= CURDATE() - INTERVAL 30 DAY";
                     break;
                 case 2: // All Time
                     $sql = "SELECT sh.*, ua.fullName AS name
                             FROM `ServiceHistory` sh
-                            LEFT JOIN `UserAccount` ua ON sh.cleanerID = ua.id
+                            LEFT JOIN `UserAccount` ua ON sh.homeownerID = ua.id
                             WHERE sh.`homeownerID` = :homeownerID
-                            AND (ua.`fullName` LIKE :searchTerm AND sh.`category`LIKE :category)";
+                            AND sh.`category`LIKE :category";
                     break;
             }
 
             $stmt = $db_conn->prepare($sql);
             $stmt->bindParam(':homeownerID', $homeownerID);
-            $stmt->bindParam(':searchTerm', $searchTerm);
             $stmt->bindParam(':category', $category);
             $execResult = $stmt->execute();
             unset($db_handle); // Disconnect DB Conn

@@ -1,18 +1,18 @@
 <?php
-require_once "entity/UserProfile.php";
 
-class ViewAllUserProfileController {
-    
+require_once ("/var/www/html/entity/UserProfile.php");
+
+class ViewAllUserProfileController
+{
     private $userProfile;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userProfile = new UserProfile();
     }
 
-    // Returns All User Profiles
-    public function readAllUserProfile() {
+    public function readAllUserProfile(): ?array
+    {
         return $this->userProfile->readAllUserProfile();
     }
 }
-
-?>

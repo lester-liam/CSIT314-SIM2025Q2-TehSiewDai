@@ -1,56 +1,67 @@
 <?php
 
-require_once('/var/www/html/entity/CleanerService.php');
+require_once("/var/www/html/entity/CleanerService.php");
 
-class CreateCleanerServiceController {
-
+class CreateCleanerServiceController
+{
     private $cleanerService;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cleanerService = new CleanerService();
     }
 
-    // Update User Account, Returns Boolean Value (Success/Fail)
-    public function createCleanerService($serviceCategoryID, $cleanerID, $serviceName, $price) {
-        return $this->cleanerService->createCleanerService($serviceCategoryID, $cleanerID, $serviceName, $price);
+    public function createCleanerService (
+        int $serviceCategoryID,
+        int $cleanerID,
+        string $serviceName,
+        float $price
+    ): bool {
+        return $this->cleanerService->createCleanerService(
+            $serviceCategoryID,
+            $cleanerID,
+            $serviceName,
+            $price
+        );
     }
-
 }
 
-// `createCleanerService.php` Script
-// Executes when Create Cleaner Service is Submitted (POST Request)
+/**
+ * Script to handle the submission of the Create Service Category form.
+ * Expects a POST request with `serviceCategoryID`, 'cleanerID', 'serviceName'
+ * and 'price' parameters.
+ */
 if (
     isset($_POST['serviceCategoryID']) &&
     isset($_POST['cleanerID']) &&
     isset($_POST['serviceName']) &&
     isset($_POST['price'])
     ) {
+        // Instantiate New Controller
+        $controller = new CreateCleanerServiceController();
 
-        // Convert string ID to integer
+        // Convert String Parameters to Integer
         $serviceCategoryID = (int) $_POST['serviceCategoryID'];
         $cleanerID = (int) $_POST['cleanerID'];
         $price = (float) $_POST['price'];
 
-        // Instantiate New Controller & Service
-        $controller = new CreateCleanerServiceController();
-        $status = $controller->createCleanerService($serviceCategoryID, $cleanerID, $_POST['serviceName'], $price);
+        $status = $controller->createCleanerService(
+            $serviceCategoryID,
+            $cleanerID,
+            $_POST['serviceName'],
+            $price
+        );
 
-        // Display Success or Fail
+        // Redirect back to the form with status message
         if ($status) {
             header("Location: ../createCleanerService.php?id=$serviceCategoryID&status=1");
             exit();
-
         } else {
             header("Location: ../createCleanerService.php?id=$serviceCategoryID&status=0");
             exit();
         }
-
 } else {
-
     $id = (int) $_POST['id'];
     header("Location: ../createCleanerService.php?id=$serviceCategoryID&status=0");
     exit();
-
 }
-
-?>

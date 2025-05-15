@@ -1,18 +1,18 @@
 <?php
-require_once "entity/UserAccount.php";
 
-class ViewAllUserAccountController {
+require_once ("/var/www/html/entity/UserAccount.php");
 
+class ViewAllUserAccountController
+{
     private $userAccount;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userAccount = new UserAccount();
     }
 
-    // Returns All User Account
-    public function readAllUserAccount() {
+    public function readAllUserAccount(): ?array
+    {
         return $this->userAccount->readAllUserAccount();
     }
 }
-
-?>
