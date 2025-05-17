@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: php-server
+    env: docker
+    plan: free
+    repo: https://docker.io/lesterliam/my-php-app  # image source (public)
+    dockerImage: lesterliam/my-php-app             # reference to Docker Hub image
+    region: singapore
+    envVars:
+      - key: DB_URI
+        sync: false
+      - key: DB_SSL_CA_B64
+        sync: false
