@@ -3,8 +3,7 @@ services:
     name: php-server
     env: docker
     plan: free
-    repo: https://docker.io/lesterliam/csit314-sim2025q2-tehsiewdai-app
-    dockerImage: lesterliam/csit314-sim2025q2-tehsiewdai-app
+    dockerImage: https://docker.io/lesterliam/csit314-sim2025q2-tehsiewdai-app
     region: singapore
     envVars:
       - key: DB_URI
