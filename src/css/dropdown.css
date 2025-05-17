@@ -1,3 +1,13 @@
+/*
+ * CSS Disclaimer:
+ * Please note that some or all of the CSS code in this stylesheet have been
+ * adapted or directly sourced from W3Schools.
+ *
+ * W3Schools n.d., CSS Dropdowns, W3Schools,
+ *    viewed 17 May 2025, <https://www.w3schools.com/css/css_dropdowns.asp>.
+ */
+
+
 /* Style The Dropdown Button */
 .dropbtn {
   background-color: #16423C;
@@ -8,7 +18,7 @@
   cursor: pointer;
 }
 
-/* The container <div> - needed to position the dropdown content */
+/* Dropdown Container */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -24,7 +34,6 @@
   z-index: 1;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
   color: #16423C;
   padding: 12px 16px;
@@ -32,15 +41,14 @@
   display: block;
 }
 
-/* Change color of dropdown links on hover */
+/* Style Dropdown Content On Hover */
 .dropdown-content a:hover {background-color: #ADCDC8}
 
-/* Show the dropdown menu on hover */
+/* Display Dropdown On Hover */
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
   background-color: #4B827B;
 }

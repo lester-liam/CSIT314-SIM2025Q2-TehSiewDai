@@ -35,10 +35,20 @@ while (count($uniqueStrings) < 100) {
 
 $scriptRanSuccess = true;
 $cleanerService = new CleanerService();
+// Loop Through Each Word & Create New Cleaner Service
 foreach ($uniqueStrings as $w) {
+
+    // Randomly Create for Demo Users
+    $y = rand(0, 1);
+    if ($y == 1) {
+        $cID = rand(3, 5);
+    } else {
+        $cID = rand(40, 69);
+    }
+
     $status = $cleanerService->createCleanerService(
         rand(1, 107),
-        rand(40, 69),
+        $cID,
         $w,
         rand(100, 500)
     );

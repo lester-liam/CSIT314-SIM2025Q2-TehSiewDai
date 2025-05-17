@@ -1,3 +1,18 @@
+/*
+ *  CSIT314: SIM2025Q2-TehSiewDai CSS App Styling
+ *      Primary Color: #16423C
+ *      Secondary Color: #4B827B
+ *      Tertiary Colors: #FBFBFB, #ADCDC8
+ *
+ *      Danger Colors: #B22222, #CD5C5C (Hover)
+ *      Success Color: #32CD32
+ *      Disabled Color: #6e6d6d
+ *
+ *      White Colors: #F6F6F6; #FBFBFB
+ */
+
+
+/* Body & Danger/Alert/Success Common Styling */
 * {
     margin: 0px;
     padding: 0px;
@@ -9,17 +24,6 @@ body {
     height: 100vh;
     background-color: #F6F6F6;
 }
-
-/*
-CSS Colours Template
-    Primary Color: #16423C
-    Secondary Color: #4B827B
-    Tertiary Color: #FBFBFB / #ADCDC8
-
-    Danger Color: #B22222 / #CD5C5C (Hover)
-    Success Color: #32CD32
-    Disabled Color: #6e6d6d
-*/
 
 .alert-danger {
     padding: 10px;
@@ -42,8 +46,8 @@ CSS Colours Template
     padding: 2px
 }
 
-/* Navbar Styling */
 
+/* Navbar & Header Styling */
 .navbar {
     background-color: #16423C;
     padding: 15px 0;
@@ -198,7 +202,6 @@ h2 {
 
 
 /* Table CSS Style */
-
 .display-table {
     width: 100%;
     border-collapse: collapse;
@@ -282,8 +285,8 @@ h2 {
     color: #FBFBFB;
 }
 
-/* Form CSS Styling */
 
+/* Form CSS Styling */
 .form-container {
     position: relative;
     width: 540px;

@@ -1,58 +1,53 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
 require_once 'controllers/ViewAllCleanerServiceController.php';
 require_once 'controllers/SearchCleanerServiceController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
-    header("Location: login.php");
-    exit();
+// User is Logged In
+if (
+  !isset($_SESSION['id']) &&
+  !isset($_SESSION['username']) &&
+  !isset($_SESSION['userProfile'])
+) {
+  header("Location: login.php");
+  exit();
 }
 
-// Ensure User is Cleaner
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Cleaner") {
-     header("Location: login.php");
-     exit();
+  header("Location: login.php");
+  exit();
 }
 
 $cleanerID = (int) $_SESSION['id']; // Cleaner ID
 
-// Retrieve all Cleaner Services with Controller
-$controller = new ViewAllCleanerServiceController();
-
-// Get all user accounts
-$cleanerService = $controller->ViewAllCleanerService($cleanerID);
-
+// Check if GET['id'] Parameter Exists
 if (isset($_GET['q'])) {
-
   if ($_GET['q'] != '') {
+    // Remove Quotes, URL Decode, Trim Consecutive/Trailing Whitespaces
+    $searchTerm = str_replace(['"', "'"], '', $_GET['q']);
 
-    // Remove quotes (both single and double)
-    $searchTermWithoutQuotes = str_replace(['"', "'"], '', $_GET['q']);
+    // URL Decode
+    $searchTerm = urldecode($searchTerm);
 
-    // Decode URL-encoded characters, including %20 for spaces
-    $searchTerm = urldecode($searchTermWithoutQuotes);
-
-    // Remove 2 or more consecutive whitespaces
+    // Trim Consecutive/Trailing Whitespaces
     $searchTerm = preg_replace('/\s{2,}/', ' ', $searchTerm);
-
-    // Remove trailing whitespaces
     $searchTerm = ltrim($searchTerm);
     $searchTerm = rtrim($searchTerm);
 
-    // Instantiate the search controller
+    // Search Cleaner Service
     $controller = new SearchCleanerServiceController();
-
-    // Search Cleaner Services
     $cleanerService = $controller->SearchCleanerService($cleanerID, $searchTerm);
   }
+} else {
+  // Read All CleanerServices
+  $controller = new ViewAllCleanerServiceController();
+  $cleanerService = $controller->ViewAllCleanerService($cleanerID);
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,16 +55,11 @@ if (isset($_GET['q'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Services</title>
-
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/modal.css">
-
-
-
 </head>
 
 <body>
-
   <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-left">
@@ -78,7 +68,10 @@ if (isset($_GET['q'])) {
       <a href="viewMatches.php">My Matches</a>
     </div>
     <div class="navbar-right">
-      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <span class="navbar-right-text">Logged in as,<br/>
+        (<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>)
+        <?php echo htmlspecialchars($_SESSION["username"]); ?>
+      </span>
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>
@@ -88,10 +81,11 @@ if (isset($_GET['q'])) {
 
   <div class="section-container">
     <div class="search">
-      <div class="search-group">
+    <div class="search-group">
         <div class="input-wrapper">
           <ion-icon name="search-outline"></ion-icon>
-          <input type="text" id="search_term" type="text" placeholder="Search..." value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
+          <input type="text" id="search_term" type="text" placeholder="Search..."
+                 value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
         </div>
         <button onclick='searchBtnClicked()' class="search-button">Search</button>
       </div>
@@ -101,7 +95,7 @@ if (isset($_GET['q'])) {
       </button>
     </div>
 
-    <!-- User Table -->
+    <!-- Table -->
     <table class="display-table">
       <thead>
         <tr>
@@ -126,9 +120,8 @@ if (isset($_GET['q'])) {
       </tbody>
     </table>
 
-    <!-- The Modal -->
+    <!-- Modal -->
     <div id="CleanerServiceModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
@@ -163,15 +156,15 @@ if (isset($_GET['q'])) {
         </div>
       </div>
     </div>
-
   </div>
 
+  <!-- Javascript -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
   <script>
-
+    // Search Button Clicked
     function searchBtnClicked() {
+      // Get Search Input
       var searchTermInput = document.getElementById("search_term");
       var searchTerm = searchTermInput.value;
 
@@ -179,6 +172,7 @@ if (isset($_GET['q'])) {
       searchTerm = searchTerm.replace(/[^a-zA-Z0-9\s]+/g, '');
       searchTerm = searchTerm.replace(/\s+/g, ' ');
 
+      // Update URL to include GET['q'] Parameter
       window.location.href = 'viewCleanerService.php?q="' + searchTerm + '"';
     }
 
@@ -233,10 +227,9 @@ if (isset($_GET['q'])) {
         alert(error.message)
       });
 
+      // Display Modal
       CleanerServiceModal.style.display = "block";
     }
-
   </script>
-
 </body>
 </html>

@@ -21,7 +21,7 @@ if ($_SESSION['userProfile'] != "Homeowner") {
     exit();
 }
 
-// Initialize Cleaner ID
+// Initialize Homeowner ID
 $homeownerID = (int) $_SESSION['id'];
 
 // Retrieve GET Variables
@@ -38,7 +38,6 @@ if (
     if (empty($category)) {
       $category = "";
     }
-
 
     // Convert dateOption to integer
     $dateOption = (int) $_GET['dateOption'];
@@ -76,7 +75,10 @@ if (
       <a href="viewBookings.php" class="active">History</a>
     </div>
     <div class="navbar-right">
-      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <span class="navbar-right-text">Logged in as,<br/>
+        (<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>)
+        <?php echo htmlspecialchars($_SESSION["username"]); ?>
+      </span>
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>

@@ -2,6 +2,7 @@
 
 require_once "/var/www/html/entity/Database.php";
 
+// List of Demo Service Categories
 $services = array(
     'General House Cleaning',
     'Deep Cleaning',
@@ -12,10 +13,12 @@ $services = array(
     'Window Cleaning Services',
 );
 
+// Create Random Timestamp Date
 function createDate(): string {
     $year = "2025";
-    $month = rand(1, 5);
+    $month = rand(1, 5);    // Random Month
 
+    // Ensure February Date <=28 & No Future Dates
     if ($month == 2) {
         $day = rand(1, 28);
     } elseif ($month == 5) {
@@ -24,9 +27,11 @@ function createDate(): string {
         $day = rand(1, 30);
     }
 
+    // Random Hour & Minute
     $hour = rand(8, 18);
     $minute = rand(0, 59);
 
+    // Create Timestamp & Return as String
     $timestamp = $year . "-" . $month . "-" . $day . " " . $hour. ":" . "$minute" . ":00";
     return $timestamp;
 }
@@ -40,8 +45,17 @@ for ($x = 0; $x < 100; $x++) {
         // Get Random Values
         $i = array_rand($services);
         $category = $services[$i];
-        $cID = rand(40, 69);
-        $hoID = rand(70, 108);
+
+        // Randomly Input for Demo Users
+        $y = rand(0, 1);
+        if ($y == 1) {
+            $cID = rand(3, 5);
+            $hoID = rand(6, 8);
+        } else {
+            $cID = rand(40, 69);
+            $hoID = rand(70, 108);
+        }
+
         $sDate = createDate();
         error_log("Date before bindParam: " . $sDate);  // Debugging
 

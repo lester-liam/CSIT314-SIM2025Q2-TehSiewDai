@@ -1,3 +1,5 @@
+SET SESSION sql_mode = 'ANSI_QUOTES';
+
 CREATE DATABASE IF NOT EXISTS csit314;
 
 use csit314;
@@ -115,10 +117,10 @@ GROUP BY date, sc.category;
 
 -- Insert Sample Records in Each Table
 INSERT INTO UserProfile (id, role, description, isSuspend) VALUES
-(1, "User Admin", "For User Management", 0),
-(2, "Platform Management", "For Service Categories Management", 0),
-(3, "Cleaner", "For cleaners to manage their services", 0),
-(4, "Homeowner", "For homeowners to access Cleaner Services.", 0);
+(1, 'User Admin', 'For User Management', 0),
+(2, 'Platform Management', 'For Service Categories Management', 0),
+(3, 'Cleaner', 'For cleaners to manage their services', 0),
+(4, 'Homeowner', 'For homeowners to access Cleaner Services.', 0);
 
 INSERT INTO UserAccount (id, username, password, fullName, email, phone, userProfile, isSuspend) VALUES
 (1, 'u1', md5('u1'), 'Adam Mayer', 'adam.mayer@example.com', '43202034', 'User Admin', 0),
@@ -140,16 +142,16 @@ INSERT INTO ServiceCategory (category, description) VALUES
 ('Window Cleaning Services', 'Interior and exterior window cleaning.');
 
 INSERT INTO CleanerService (serviceCategoryID, cleanerID, serviceName, price, numViews, numShortlists, createdAt, updatedAt) VALUES
-(1, 3, "Routine Cleaning", 25.00, 5, 2, '2025-04-28 09:00:00', '2025-04-28 09:00:00'),
-(2, 4, "Deep Cleaning Toilet", 30.50, 10, 3, '2025-04-28 11:30:00', '2025-04-28 11:30:00'),
-(3, 5, "Moving Package Cleaning", 40.00, 15, 5, '2025-04-25 14:00:00', '2025-04-25 14:00:00'),
-(1, 4, "Routine Cleaning", 28.00, 20, 7, '2025-04-24 16:45:00', '2025-04-28 13:15:00'),
-(2, 5, "Deep Cleaning Kitchen", 35.00, 8, 2, '2025-04-20 10:00:00', '2025-04-20 10:00:00'),
-(3, 3, "Moving Package Cleaning", 50.00, 25, 10, '2025-01-15 18:00:00', '2025-01-15 18:00:00'),
-(1, 5, "Mop Service", 22.00, 12, 4, '2025-03-01 09:30:00', '2025-03-01 09:30:00'),
-(2, 3, "Specialized Moving Cleaning Service", 38.00, 3, 1, '2025-04-28 15:00:00', '2025-04-28 16:30:00'),
-(3, 4, "Moving Package Cleaning", 45.00, 18, 6, '2024-11-20 12:00:00', '2024-11-20 12:00:00'),
-(1, 5, "Dusting Services", 27.50, 9, 3, '2025-04-22 08:00:00', '2025-04-26 17:45:00');
+(1, 3, 'Routine Cleaning', 25.00, 5, 2, '2025-04-28 09:00:00', '2025-04-28 09:00:00'),
+(2, 4, 'Deep Cleaning Toilet', 30.50, 10, 3, '2025-04-28 11:30:00', '2025-04-28 11:30:00'),
+(3, 5, 'Moving Package Cleaning', 40.00, 15, 5, '2025-04-25 14:00:00', '2025-04-25 14:00:00'),
+(1, 4, 'Routine Cleaning', 28.00, 20, 7, '2025-04-24 16:45:00', '2025-04-28 13:15:00'),
+(2, 5, 'Deep Cleaning Kitchen', 35.00, 8, 2, '2025-04-20 10:00:00', '2025-04-20 10:00:00'),
+(3, 3, 'Moving Package Cleaning', 50.00, 25, 10, '2025-01-15 18:00:00', '2025-01-15 18:00:00'),
+(1, 5, 'Mop Service', 22.00, 12, 4, '2025-03-01 09:30:00', '2025-03-01 09:30:00'),
+(2, 3, 'Specialized Moving Cleaning Service', 38.00, 3, 1, '2025-04-28 15:00:00', '2025-04-28 16:30:00'),
+(3, 4, 'Moving Package Cleaning', 45.00, 18, 6, '2024-11-20 12:00:00', '2024-11-20 12:00:00'),
+(1, 5, 'Dusting Services', 27.50, 9, 3, '2025-04-22 08:00:00', '2025-04-26 17:45:00');
 
 INSERT INTO Shortlist (homeownerID, serviceID) VALUES (6, 1);
 INSERT INTO Shortlist (homeownerID, serviceID) VALUES (6, 3);
@@ -158,11 +160,11 @@ INSERT INTO Shortlist (homeownerID, serviceID) VALUES (8, 7);
 INSERT INTO Shortlist (homeownerID, serviceID) VALUES (8, 9);
 
 INSERT INTO ServiceHistory (category, cleanerID, homeownerID, serviceDate) VALUES
-("General House Cleaning", 3, 6, '2025-05-05 10:00:00'),
-("Deep Cleaning", 4, 7, '2025-05-12 14:30:00'),
-("Specialized Room Cleaning", 5, 8, '2025-05-06 09:00:00'),
-("Deep Cleaning", 3, 7, '2025-03-26 16:00:00'),
-("Specialized Room Cleaning", 4, 6, '2025-03-02 11:45:00');
+('General House Cleaning', 3, 6, '2025-05-05 10:00:00'),
+('Deep Cleaning', 4, 7, '2025-05-12 14:30:00'),
+('Specialized Room Cleaning', 5, 8, '2025-05-06 09:00:00'),
+('Deep Cleaning', 3, 7, '2025-03-26 16:00:00'),
+('Specialized Room Cleaning', 4, 6, '2025-03-02 11:45:00');
 
 
 -- Create Test Database
@@ -196,9 +198,9 @@ CREATE TABLE UserAccount (
 );
 
 INSERT INTO UserProfile (role, description, isSuspend) VALUES
-("User Admin", "For User Management", 0),
-("Homeowner", "For cleaners to manage their services", 1),
-("Cleaner", "For cleaners to manage their services", 0);
+('User Admin', 'For User Management', 0),
+('Homeowner', 'For cleaners to manage their services', 1),
+('Cleaner', 'For cleaners to manage their services', 0);
 
 INSERT INTO UserAccount (username, password, fullName, email, phone, userProfile, isSuspend) VALUES
 ('u1', md5('u1'), 'Adam Mayer', 'adam.mayer@example.com', '43202034', 'User Admin', 0),

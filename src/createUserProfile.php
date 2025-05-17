@@ -1,22 +1,24 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
+// Check if User is Logged In
+if (
+    !isset($_SESSION['id']) &&
+    !isset($_SESSION['username']) &&
+    !isset($_SESSION['userProfile'])
+) {
     header("Location: login.php");
     exit();
 }
 
-// Ensure User is Admin
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "User Admin") {
-     // If not, redirect them to a non-admin page or display an error
-     header("Location: login.php"); // Replace with your unauthorized page
-     exit();
+    header("Location: login.php");
+    exit();
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,11 +27,9 @@ if ($_SESSION['userProfile'] != "User Admin") {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create User Profile</title>
   <link rel="stylesheet" href="css/style.css">
-
 </head>
 
 <body>
-
   <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-left">
@@ -38,7 +38,10 @@ if ($_SESSION['userProfile'] != "User Admin") {
       <a href="viewUserAccount.php">User Account</a>
     </div>
     <div class="navbar-right">
-      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <span class="navbar-right-text">Logged in as,<br/>
+        (<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>)
+        <?php echo htmlspecialchars($_SESSION["username"]); ?>
+      </span>
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>
@@ -62,39 +65,34 @@ if ($_SESSION['userProfile'] != "User Admin") {
         <input type="text" id="role" name="role" required>
         <span id='roleValidation' class='text-danger'></span>
       </div>
-
       <div class="form-group">
         <label for="description">Description:</label>
         <input type="text" id="description" name="description" required>
         <span id='descValidation' class='text-danger'></span>
       </div>
-
       <div class="submit-row">
         <a href="viewUserProfile.php" class="back-button">Back</a>
         <button type="submit" id="submit-button" class="submit-button">Create</button>
       </div>
     </form>
   </div>
-  
-  
+
   <!-- Javascript -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script>
+    // Form Validation
     const form = document.querySelector("form");
 
-    // Prevent form submission on button click and handle validation
+    // Submit Button Event
     document.getElementById("submit-button").addEventListener("click", function (event) {
-      event.preventDefault(); // Prevent the default form submission
-
-      const roleInput = document.getElementById('role');
-      const descriptionInput = document.getElementById('description');
-
-      const trimmedRole = roleInput.value.trim();
-      const trimmedDescription = descriptionInput.value.trim();
+      event.preventDefault();
 
       let isValid = true;
 
+      // Role Validation: Not NULL
+      const roleInput = document.getElementById('role');
+      const trimmedRole = roleInput.value.trim();
       if (!trimmedRole) {
         document.getElementById('roleValidation').innerText = "Role cannot be empty";
         isValid = false;
@@ -102,6 +100,9 @@ if ($_SESSION['userProfile'] != "User Admin") {
         document.getElementById('roleValidation').innerText = "";
       }
 
+      // Description Validation: Not NULL
+      const descriptionInput = document.getElementById('description');
+      const trimmedDescription = descriptionInput.value.trim();
       if (!trimmedDescription) {
         document.getElementById('descValidation').innerText = "Description cannot be empty";
         isValid = false;

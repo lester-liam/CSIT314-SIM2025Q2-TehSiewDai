@@ -1,18 +1,21 @@
 <?php
 
-class Database {
-
+class Database
+{
     private $db_conn;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db_conn = new PDO("mysql:host=db;dbname=csit314", "root", "csit314");
     }
 
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->db_conn;
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->db_conn = null;
     }
 }

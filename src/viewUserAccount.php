@@ -1,34 +1,30 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
 require_once 'controllers/ViewAllUserAccountController.php';
 require_once 'controllers/SearchUserAccountController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
-    header("Location: login.php");
-    exit();
+// Check if User is Logged In
+if (
+  !isset($_SESSION['id']) &&
+  !isset($_SESSION['username']) &&
+  !isset($_SESSION['userProfile'])
+) {
+  header("Location: login.php");
+  exit();
 }
 
-// Ensure User is Admin
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "User Admin") {
-     header("Location: login.php");
-     exit();
+  header("Location: login.php");
+  exit();
 }
 
-// Retrieve all user profiles with Controller
-$controller = new ViewAllUserAccountController();
 
-// Get all user accounts
-$userAccount = $controller->readAllUserAccount();
-
+// Search UserAccount if GET['q'] Parameter Exists
 if (isset($_GET['q'])) {
-
   if ($_GET['q'] != '') {
-
     // Remove quotes (both single and double)
     $searchTermWithoutQuotes = str_replace(['"', "'"], '', $_GET['q']);
 
@@ -48,8 +44,11 @@ if (isset($_GET['q'])) {
     // Search user accounts
     $userAccount = $controller->searchUserAccount($searchTerm);
   }
+} else {
+    // Get all user accounts
+    $controller = new ViewAllUserAccountController();
+    $userAccount = $controller->readAllUserAccount();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +56,7 @@ if (isset($_GET['q'])) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>User Profile</title>
+  <title>User Account</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -71,7 +70,10 @@ if (isset($_GET['q'])) {
       <a href="viewUserAccount.php" class="active">User Account</a>
     </div>
     <div class="navbar-right">
-      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <span class="navbar-right-text">Logged in as,<br/>
+        (<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>)
+        <?php echo htmlspecialchars($_SESSION["username"]); ?>
+      </span>
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>
@@ -84,7 +86,8 @@ if (isset($_GET['q'])) {
       <div class="search-group">
         <div class="input-wrapper">
           <ion-icon name="search-outline"></ion-icon>
-          <input id="search_term" type="text" placeholder="Search..." value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
+          <input type="text" id="search_term" type="text" placeholder="Search..."
+                 value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
         </div>
         <button onclick='searchBtnClicked()' class="search-button">Search</button>
       </div>

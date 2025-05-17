@@ -1,29 +1,28 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
 require_once 'controllers/ViewAllServiceCategoryController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
+// User is Logged In
+if (
+    !isset($_SESSION['id']) &&
+    !isset($_SESSION['username']) &&
+    !isset($_SESSION['userProfile'])
+) {
     header("Location: login.php");
     exit();
 }
 
-// Ensure User is Cleaner
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Cleaner") {
-     header("Location: login.php");
-     exit();
+    header("Location: login.php");
+    exit();
 }
 
-// Retrieve all Service Category with Controller
+// Retrieve All Service Category
 $controller = new ViewAllServiceCategoryController();
-
-// Get all Service Category
 $serviceCategory = $controller->readAllServiceCategory();
-
 ?>
 
 
@@ -46,19 +45,21 @@ $serviceCategory = $controller->readAllServiceCategory();
       <a href="viewMatches.php">My Matches</a>
     </div>
     <div class="navbar-right">
-      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <span class="navbar-right-text">Logged in as,<br/>
+        (<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>)
+        <?php echo htmlspecialchars($_SESSION["username"]); ?>
+      </span>
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>
 
   <!-- Headline -->
   <h1>Choose Service Type</h1>
-
   <div class="section-container">
     <div class="search">
       <div class="search-group">
         <div class="input-wrapper">
-          <input type="hidden" type="text" placeholder="Search...">
+          <input type="hidden" type="text">
         </div>
       </div>
       <button onclick='window.location.href="viewCleanerService.php"' class="create-button">
@@ -67,7 +68,7 @@ $serviceCategory = $controller->readAllServiceCategory();
       </button>
     </div>
 
-    <!-- User Table -->
+    <!-- Table -->
     <table class="display-table">
       <thead>
         <tr>
@@ -86,23 +87,21 @@ $serviceCategory = $controller->readAllServiceCategory();
               <td>
                 <button class="view-button" onclick='window.location.href="createCleanerService.php?id=<?php echo htmlspecialchars($sc->getId()); ?>"'><ion-icon name="add-outline"></ion-icon>Create</button>
               </td>
-
           </tr>
       <?php endforeach; ?>
       </tbody>
     </table>
   </div>
-
+  <!-- Javascript -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
   <script>
+    // Delete Button Clicked
     function deleteButtonClicked(id) {
       if (confirm("Confirm Delete Service Category?") == true) {
         window.location.href='./controllers/DeleteServiceCategoryController.php?id=' + id;
       }
     }
   </script>
-
 </body>
 </html>

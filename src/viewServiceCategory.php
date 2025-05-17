@@ -129,7 +129,6 @@ if (isset($_GET['q'])) {
   <script>
     // Search Button Clicked
     function searchBtnClicked() {
-
       // Get Search Input
       var searchTermInput = document.getElementById("search_term");
       var searchTerm = searchTermInput.value;

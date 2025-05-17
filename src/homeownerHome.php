@@ -1,35 +1,34 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
+require_once 'controllers/ViewAllShortlistController.php';
 require_once 'controllers/HoViewAllServiceController.php';
 require_once 'controllers/HoSearchServiceController.php';
-require_once 'controllers/ViewAllShortlistController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
+// Check if User is Logged In
+if (
+    !isset($_SESSION['id']) &&
+    !isset($_SESSION['username']) &&
+    !isset($_SESSION['userProfile'])
+) {
     header("Location: login.php");
     exit();
 }
 
-// Ensure User is Cleaner
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Homeowner") {
-     header("Location: login.php");
-     exit();
+    header("Location: login.php");
+    exit();
 }
 
-$homeownerID = (int) $_SESSION['id']; // Cleaner ID
+$homeownerID = (int) $_SESSION['id']; // Homeowner ID
 
-// Retrieve all Cleaner Services with Controller
-$controller = new HoViewAllServiceController();
-
-// Retrieve the homeowner's current shortlist
+// Retrieve the Homeowner's Current Shortlist
 $shortlistController = new ViewAllShortlistController();
 $shortlistedServices = $shortlistController->viewAllShortlist($homeownerID);
 
-// Extract service IDs from the shortlist objects
+// Extract Service IDs from the Shortlist Array
 $shortlistedServiceIDs = [];
 if ($shortlistedServices) {
     foreach ($shortlistedServices as $s) {
@@ -37,32 +36,29 @@ if ($shortlistedServices) {
     }
 }
 
-
-// Get all user accounts
-$cleanerService = $controller->hoViewAllService();
-
+// Search Service if GET['q'] Parameter Exists
 if (isset($_GET['q'])) {
-
   if ($_GET['q'] != '') {
+    // Remove Quotes, URL Decode, Trim Consecutive/Trailing Whitespaces
+    $searchTerm = str_replace(['"', "'"], '', $_GET['q']);
 
-    $controller = new HoSearchServiceController();
+    // URL Decode
+    $searchTerm = urldecode($searchTerm);
 
-    // Remove Quotes & Decode URL (Eg. %20 for Whitespaces)
-    $searchTermWithoutQuotes = str_replace(['"', "'"], '', $_GET['q']);
-    $searchTerm = urldecode($searchTermWithoutQuotes);
-
-    // Remove 2 or more consecutive whitespaces
+    // Trim Consecutive/Trailing Whitespaces
     $searchTerm = preg_replace('/\s{2,}/', ' ', $searchTerm);
-
-    // Remove trailing whitespaces
     $searchTerm = ltrim($searchTerm);
     $searchTerm = rtrim($searchTerm);
 
+    // Search Cleaner Service
+    $controller = new HoSearchServiceController();
     $cleanerService = $controller->hoSearchService($searchTerm);
-
   }
+} else {
+    // Read All Services
+    $controller = new HoViewAllServiceController();
+    $cleanerService = $controller->hoViewAllService();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -71,17 +67,11 @@ if (isset($_GET['q'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Services</title>
-
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/modal.css">
   <link rel="stylesheet" href="css/columnCard.css">
-
-
-
 </head>
-
 <body>
-
   <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-left">
@@ -91,7 +81,10 @@ if (isset($_GET['q'])) {
       <a href="viewBookings.php">History</a>
     </div>
     <div class="navbar-right">
-      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <span class="navbar-right-text">Logged in as,<br/>
+        (<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>)
+        <?php echo htmlspecialchars($_SESSION["username"]); ?>
+      </span>
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>
@@ -103,23 +96,24 @@ if (isset($_GET['q'])) {
     <div class="search">
       <div class="search-group">
         <div class="input-wrapper">
-          <ion-icon name="search-outline"></ion-icon>
-          <input type="text" id="search_term" type="text" placeholder="Search..." value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
+        <ion-icon name="search-outline"></ion-icon>
+          <input type="text" id="search_term" type="text" placeholder="Search..."
+                 value=<?php if (isset($_GET['q'])) { echo $_GET['q']; } ?>>
         </div>
         <button onclick='searchBtnClicked()' class="search-button">Search</button>
       </div>
     </div>
-
     <?php
 
       $counter = 0; // Initialize Counter to 0
       foreach ($cleanerService as $cs) {
           $isShortlisted = in_array($cs->getId(), $shortlistedServiceIDs);
 
+          // Create a Row of Column Cards
           if ($counter % 4 === 0) {
               echo '<div class="row">';
           }
-
+          // Create Column & Card
           echo '<div class="column">';
           echo '  <div class="card">';
           echo '    <h3>' . htmlspecialchars(($cs->getServiceName())) . '</h3>';
@@ -128,7 +122,7 @@ if (isset($_GET['q'])) {
           echo '    <button onclick="viewService(' .
                                         $cs->getId() . ')"' .
                                         ' class="submit-button">View</button>';
-
+          // If isShortlisted (Disable Button)
           if ($isShortlisted) {
             echo '    <button onclick="shortlistService(' .
             $cs->getId() . ', ' .
@@ -142,27 +136,24 @@ if (isset($_GET['q'])) {
           }
 
           echo '  </div>';
-          echo '</div>';
+          echo '</div>'; // Close Column & Card
 
-          $counter = $counter + 1;
-
+          $counter = $counter + 1; // Increment Counter
           if ($counter % 4 === 0) {
-              echo '</div>';
+              echo '</div>'; // Close Outer Row Div
           }
       }
 
-      // Close the last row if the number of items is not a multiple of 4
+      // Close Last Row (When n items is not a multiple of 4)
       if ($counter % 4 !== 0) {
           echo '</div>';
       }
-
       ?>
     </div>
 
     <!-- The Modal -->
     <div id="ViewServiceModal" class="modal">
-
-      <!-- Modal content -->
+      <!-- Modal Content -->
       <div class="modal-content">
         <div class="modal-header">
           <h2>Service Info</h2>
@@ -188,16 +179,16 @@ if (isset($_GET['q'])) {
         </div>
       </div>
     </div>
-
   </div>
 
+  <!-- Javascript -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
   <script>
-
+    // Search Button Clicked
     function searchBtnClicked() {
-
+      // Get Search Input
       var searchTermInput = document.getElementById("search_term");
       var searchTerm = searchTermInput.value;
 
@@ -205,6 +196,7 @@ if (isset($_GET['q'])) {
       searchTerm = searchTerm.replace(/[^a-zA-Z0-9\s]+/g, '');
       searchTerm = searchTerm.replace(/\s+/g, ' ');
 
+      // Update URL to include GET['q'] Parameter
       window.location.href = 'homeownerHome.php?q="' + searchTerm + '"';
     }
 
@@ -216,38 +208,34 @@ if (isset($_GET['q'])) {
       modal.style.display = "none";
     }
 
+    // Display Modal
     function viewService(id) {
-
-      // Modal
+      // Modal Element
       const CleanerServiceModal = document.getElementById("ViewServiceModal");
 
-      // Use fetch API (modern approach) or XMLHttpRequest (older approach)
+      // Fetch Service Info
       fetch(`./controllers/HoViewServiceController.php?id=${id}`) // Replace with your PHP script URL
             .then(response => response.json()) // Or response.text() if you're not expecting JSON
             .then(data => {
-
-              // Populate the modal with the data received from PHP
               document.getElementById('category').value = data.category;
               document.getElementById('serviceName').value = data.serviceName;
               document.getElementById('cleanerName').value = data.cleanerName;
               document.getElementById('price').value = data.price;
-
-        CleanerServiceModal.style.display = "block";
+              CleanerServiceModal.style.display = "block";
       })
       .catch(error => {
         console.error("Error fetching service data:", error);
         alert(error.message)
       });
-
     }
 
+    // Shortlist Service
     function shortlistService(serviceID, homeownerID) {
+      // Confirm Prompt & Call Controller
       if (confirm("Confirm Shortlist?") == true) {
-        // Use fetch API (modern approach) or XMLHttpRequest (older approach)
         fetch(`./controllers/NewShortlistController.php?homeownerID=${homeownerID}&serviceID=${serviceID}`) // Replace with your PHP script URL
               .then(response => response.json()) // Or response.text() if you're not expecting JSON
               .then(data => {
-
                 if (data.isSuccess) {
                   alert ("Shortlisted Successful");
                   window.location.reload(true);
@@ -261,8 +249,6 @@ if (isset($_GET['q'])) {
         });
       }
     }
-
   </script>
-
 </body>
 </html>

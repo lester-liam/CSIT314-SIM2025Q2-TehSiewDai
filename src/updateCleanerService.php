@@ -1,41 +1,36 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
 require_once 'controllers/ViewCleanerServiceController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
+// User is Logged In
+if (
+    !isset($_SESSION['id']) &&
+    !isset($_SESSION['username']) &&
+    !isset($_SESSION['userProfile'])
+) {
     header("Location: login.php");
     exit();
 }
 
-// Ensure User is Cleaner
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Cleaner") {
-     header("Location: login.php");
-     exit();
+    header("Location: login.php");
+    exit();
 }
 
 $cleanerID = (int) $_SESSION['id']; // Cleaner ID
 
-// Check if ID is Set, Otherwise Return View All User Account Page
-if (!isset($_GET['id'])) {
-
-  header("Location: viewUserAccount.php");
-  exit();
-
+// Check if GET['id'] Parameter Exists
+if (isset($_GET['id'])) {
+    // Get CleanerService
+    $controller = new ViewCleanerServiceController();
+    $cleanerService = $controller->viewCleanerService($_GET['id'], $cleanerID);
 } else {
-
-  // Instantiate the controller
-  $controller = new ViewCleanerServiceController();
-
-  // Get User account
-  $cleanerService = $controller->viewCleanerService($_GET['id'], $cleanerID);
-
+    header("Location: viewUserAccount.php");
+    exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -77,33 +72,50 @@ if (!isset($_GET['id'])) {
         </div>
       <?php } ?>
 
-      <input type="hidden" name="cleanerID" value="<?php echo htmlspecialchars($cleanerService->getCleanerID()); ?>">
+      <input type="hidden"
+             name="cleanerID"
+             value="<?php echo htmlspecialchars($cleanerService->getCleanerID()); ?>">
 
       <div class="form-group">
         <label for="id">ID:</label>
-        <input type="text" id="id" name='id' value="<?php echo htmlspecialchars($cleanerService->getId()); ?>" readonly>
+        <input type="text"
+               id="id"
+               name='id'
+               value="<?php echo htmlspecialchars($cleanerService->getId()); ?>" readonly>
       </div>
       <div class="form-group">
         <label for="category">Service Category</label>
-        <input type="text" id="category" name='category' value="<?php echo htmlspecialchars($cleanerService->getCategory()); ?>" readonly>
+        <input type="text"
+               id="category"
+               name='category'
+               value="<?php echo htmlspecialchars($cleanerService->getCategory()); ?>" readonly>
       </div>
       <div class="form-group">
         <label for="serviceName">Service Name</label>
-        <input type="text" id="serviceName" name='serviceName' value="<?php echo htmlspecialchars($cleanerService->getServiceName()); ?>">
+        <input type="text"
+               id="serviceName"
+               name='serviceName'
+               value="<?php echo htmlspecialchars($cleanerService->getServiceName()); ?>">
         <span id='sNameValidation' class='text-danger'></span>
       </div>
       <div class="form-group">
         <label for="price">Price</label>
-        <input type="number" id="price" name='price' value="<?php echo htmlspecialchars($cleanerService->getPrice()); ?>">
+        <input type="number"
+               id="price"
+               name='price'
+               value="<?php echo htmlspecialchars($cleanerService->getPrice()); ?>">
         <span id='priceValidation' class='text-danger'></span>
       </div>
       <div class="form-group">
-          <button type="button" class="suspend-button" onclick="deleteButtonClicked()">Delete</button>
+          <button type="button"
+                  class="suspend-button"
+                  onclick="deleteButtonClicked()">Delete</button>
       </div>
-
       <div class="submit-row">
         <button type="button" onclick='window.location.href="viewCleanerService.php"' class="back-button">Back</button>
-        <button type="submit" id="submit-button" class="submit-button">Update</button>
+        <button type="submit"
+                id="submit-button"
+                class="submit-button">Update</button>
       </div>
     </form>
   </div>
@@ -112,62 +124,61 @@ if (!isset($_GET['id'])) {
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script>
-
+    // Delete Button Clicked
     function deleteButtonClicked() {
       if (confirm("Confirm Delete Service?") == true) {
         window.location.href='./controllers/DeleteCleanerServiceController.php?id=<?php echo htmlspecialchars($_GET['id']); ?>&cleanerID=<?php echo htmlspecialchars($cleanerID); ?>'
       }
     }
 
+    // Form Validation
     const form = document.querySelector("form");
+    document.getElementById("submit-button").addEventListener("click", function (event) {
+      event.preventDefault();
 
-document.getElementById("submit-button").addEventListener("click", function (event) {
-    event.preventDefault();
+      let isValid = true;
 
-    let isValid = true;
+      // Service Name Validation: Not NULL and less than or equal to 48 characters
+      const sNameInput = document.getElementById('serviceName');
+      const trimmedSName = sNameInput.value.trim();
+      if (!trimmedSName) {
+          document.getElementById('sNameValidation').innerText = "Service Name cannot be empty.";
+          isValid = false;
+      } else if (trimmedSName.length > 48) {
+          document.getElementById('sNameValidation').innerText = "Service Name cannot exeed more than 48 characters.";
+          isValid = false;
+      } else {
+          document.getElementById('sNameValidation').innerText = "";
+      }
 
-    // Service Name Validation: Not NULL and less than 64 characters
-    const sNameInput = document.getElementById('serviceName');
-    const trimmedSName = sNameInput.value.trim();
-    if (!trimmedSName) {
-        document.getElementById('sNameValidation').innerText = "Service Name cannot be empty.";
+      // Price Validation: Not NULL, Positive Value, Less than 10,000, Max. 2 Decimal Points
+      const priceInput = document.getElementById('price');
+      var trimmedPrice = priceInput.value.trim();
+      const priceValue = parseFloat(trimmedPrice);
+      if (!trimmedPrice) {
+        document.getElementById('priceValidation').innerText = "Price cannot be empty.";
         isValid = false;
-    } else if (trimmedSName.length > 48) {
-        document.getElementById('sNameValidation').innerText = "Service Name cannot exeed more than 48 characters.";
+      } else if (isNaN(priceValue) || priceValue < 0) {
+        document.getElementById('priceValidation').innerText = "Price must be a non-negative number.";
         isValid = false;
-    } else {
-        document.getElementById('sNameValidation').innerText = "";
-    }
-
-    // Price Validation: Not NULL, non-negative, less than 10,000, and limited to 2 decimal points
-    const priceInput = document.getElementById('price');
-    var trimmedPrice = priceInput.value.trim();
-    const priceValue = parseFloat(trimmedPrice);
-
-    if (!trimmedPrice) {
-      document.getElementById('priceValidation').innerText = "Price cannot be empty.";
-      isValid = false;
-    } else if (isNaN(priceValue) || priceValue < 0) {
-      document.getElementById('priceValidation').innerText = "Price must be a non-negative number.";
-      isValid = false;
-    } else if (priceValue >= 10000) {
-      document.getElementById('priceValidation').innerText = "Price cannot be 10,000 or more.";
-      isValid = false;
-    } else {
-      if (!/^\d+(\.\d{2})?$/.test(trimmedPrice)) {
-        document.getElementById('priceValidation').innerText = "Price must have 2 decimal points.";
+      } else if (priceValue >= 10000) {
+        document.getElementById('priceValidation').innerText = "Price cannot be 10,000 or more.";
         isValid = false;
       } else {
-        document.getElementById('priceValidation').innerText = "";
-      }
-    }
-
-    if (isValid) {
-        if (confirm("Confirm Update Service?") == true) {
-            form.submit();
+        if (!/^\d+(\.\d{2})?$/.test(trimmedPrice)) {
+          document.getElementById('priceValidation').innerText = "Price must have 2 decimal points.";
+          isValid = false;
+        } else {
+          document.getElementById('priceValidation').innerText = "";
         }
-    }
+      }
+
+      if (isValid) {
+          if (confirm("Confirm Update Service?") == true) {
+              form.submit();
+          }
+      }
     });
-    </script>
+  </script>
 </body>
 </html>

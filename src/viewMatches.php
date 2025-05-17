@@ -1,37 +1,37 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
 require_once 'controllers/ViewMatchesController.php';
 require_once 'controllers/MatchCategoryController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
-    header("Location: login.php");
-    exit();
+// User is Logged In
+if (
+  !isset($_SESSION['id']) &&
+  !isset($_SESSION['username']) &&
+  !isset($_SESSION['userProfile'])
+) {
+  header("Location: login.php");
+  exit();
 }
 
-// Ensure User is Cleaner
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Cleaner") {
-     header("Location: login.php");
-     exit();
+  header("Location: login.php");
+  exit();
 }
 
 $cleanerID = (int) $_SESSION['id']; // Cleaner ID
 
-// Retrieve all Cleaner Services with Controller
+// Retrieve All Matches
 $controller = new ViewMatchesController();
-$controller2 = new MatchCategoryController();
-
-
-// Get all Cleaner Services & Unique Categories
 $matches = $controller->ViewMatches($cleanerID);
+
+// Retrieve All Matches Categories
+$controller2 = new MatchCategoryController();
 $categories = $controller2 -> getCategories($cleanerID);
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,11 +39,8 @@ $categories = $controller2 -> getCategories($cleanerID);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Services</title>
-
   <link rel="stylesheet" href="css/modal.css">
   <link rel="stylesheet" href="css/style.css">
-
-
 </head>
 
 <body>
@@ -188,14 +185,12 @@ $categories = $controller2 -> getCategories($cleanerID);
       </form>
       </div>
     </div>
-
   </div>
 
+  <!-- Javascript -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
   <script>
-
     const modal = document.getElementById("ViewMatchModal");
     const modal2 = document.getElementById("SearchMatchesModal");
     const closeBtn = document.getElementsByClassName("close")[0];
@@ -210,22 +205,19 @@ $categories = $controller2 -> getCategories($cleanerID);
       modal2.style.display = "none";
     }
 
+    // Display Modal
     function viewMatch(category, custName, serviceDate) {
-
       const viewModal = document.getElementById("ViewMatchModal");
       document.getElementById('viewCustName').value = custName;
       document.getElementById('viewCategory').value = category;
       document.getElementById('viewDate').value = serviceDate;
-
       viewModal.style.display = "block";
-
     }
 
+    // Display Search Modal
     function displaySearchModal() {
-
       const searchModal = document.getElementById("SearchMatchesModal");
       searchModal.style.display = "block";
-
     }
 
   </script>

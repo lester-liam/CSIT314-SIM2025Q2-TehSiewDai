@@ -1,37 +1,37 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
 require_once 'controllers/ViewBookingsController.php';
 require_once 'controllers/BookingCategoryController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
-    header("Location: login.php");
-    exit();
+// User is Logged In
+if (
+  !isset($_SESSION['id']) &&
+  !isset($_SESSION['username']) &&
+  !isset($_SESSION['userProfile'])
+) {
+  header("Location: login.php");
+  exit();
 }
 
-// Ensure User is Cleaner
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Homeowner") {
-     header("Location: login.php");
-     exit();
+  header("Location: login.php");
+  exit();
 }
 
-$homeownerID = (int) $_SESSION['id']; // Cleaner ID
+$homeownerID = (int) $_SESSION['id']; // Homeowner ID
 
-// Retrieve all Cleaner Services with Controller
+// Retrieve All Bookings
 $controller = new ViewBookingsController();
-$controller2 = new BookingCategoryController();
-
-
-// Get all Cleaner Services & Unique Categories
 $bookings = $controller->ViewBookings($homeownerID);
+
+// Retrieve All Booking Category
+$controller2 = new BookingCategoryController();
 $categories = $controller2 -> getHoCategories($homeownerID);
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,15 +39,11 @@ $categories = $controller2 -> getHoCategories($homeownerID);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Services</title>
-
   <link rel="stylesheet" href="css/modal.css">
   <link rel="stylesheet" href="css/style.css">
-
-
 </head>
 
 <body>
-
   <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-left">
@@ -57,7 +53,10 @@ $categories = $controller2 -> getHoCategories($homeownerID);
       <a href="viewBookings.php" class="active">History</a>
     </div>
     <div class="navbar-right">
-      <span class="navbar-right-text">Logged in as,<br/>(<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>) <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+      <span class="navbar-right-text">Logged in as,<br/>
+        (<?php echo htmlspecialchars($_SESSION["userProfile"]); ?>)
+        <?php echo htmlspecialchars($_SESSION["username"]); ?>
+      </span>
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>
@@ -78,7 +77,7 @@ $categories = $controller2 -> getHoCategories($homeownerID);
       </button>
     </div>
 
-    <!-- User Table -->
+    <!-- Table -->
     <table class="display-table">
       <thead>
         <tr>
@@ -114,86 +113,83 @@ $categories = $controller2 -> getHoCategories($homeownerID);
 
   </div>
 
-  <!-- The Modal -->
+  <!-- Modal -->
   <div id="ViewMatchModal" class="modal">
-
-    <!-- Modal content -->
+    <!-- Modal Content -->
     <div class="modal-content">
       <div class="modal-header">
         <h2>History Info</h2>
         <button class="close">&times;</button>
       </div>
+      <!-- Form Group Displaying Match History Record -->
       <div class="modal-body">
-      <div class="form-group">
-          <label for="viewCleanerName">Cleaner Name</label>
-          <input type="text" id="viewCleanerName" disabled>
-        </div>
         <div class="form-group">
-          <label for="viewCategory">Service Category</label>
-          <input type="text" id="viewCategory" disabled>
+            <label for="viewCleanerName">Cleaner Name</label>
+            <input type="text" id="viewCleanerName" disabled>
+          </div>
+          <div class="form-group">
+            <label for="viewCategory">Service Category</label>
+            <input type="text" id="viewCategory" disabled>
+          </div>
+          <div class="form-group">
+            <label for="viewDate">Service Completion Date</label>
+            <input type="text" id="viewDate" disabled>
+          </div>
         </div>
-
-        <div class="form-group">
-          <label for="viewDate">Service Completion Date</label>
-          <input type="text" id="viewDate" disabled>
-        </div>
-      </div>
     </div>
-
   </div>
 
-  <!-- The Modal -->
+  <!-- Modal 2 -->
   <div id="SearchMatchesModal" class="modal">
-
-    <!-- Modal content -->
+    <!-- Modal Content -->
     <div class="modal-content">
       <div class="modal-header">
         <h2>Search</h2>
         <button class="close">&times;</button>
       </div>
+      <!-- Form Group Displaying Search Form -->
       <div class="modal-body">
-      <form action="searchBookingsResult.php" method="GET">
-        <div class="form-group">
-          <label for="category">Search Category:</label>
-          <?php
-            if (empty($categories)) {
-              echo '<input type="text" id="category" name="category" value="" readonly>';
-            } else {
-              echo '<select class="form-select" id="category" name="category">';
-              echo '<option value="" selected></option>';
-              foreach ($categories as $c) {
-                echo '<option value=' .
-                      htmlspecialchars($c['category']) .
-                      '>' .
-                      $c['category'] .
-                      '</option>';
+        <form action="searchBookingsResult.php" method="GET">
+          <div class="form-group">
+            <label for="category">Search Category:</label>
+            <?php
+              if (empty($categories)) {
+                echo '<input type="text" id="category" name="category" value="" readonly>';
+              } else {
+                echo '<select class="form-select" id="category" name="category">';
+                echo '<option value="" selected></option>';
+                foreach ($categories as $c) {
+                  echo '<option value=' .
+                        htmlspecialchars($c['category']) .
+                        '>' .
+                        $c['category'] .
+                        '</option>';
+                }
+                echo '</select>';
               }
-              echo '</select>';
-            }
-          ?>
-        </div>
-        <div class="form-group">
-          <label for="dateOption">Date Range:</label>
-          <select class="form-select" id="dateOption" name="dateOption">
-            <option value="0" selected>Past 7 Days</option>
-            <option value="1">Past 30 Days</option>
-            <option value="2">All Time</option>
-          </select>
-        </div>
-        <div class="submit-row">
-          <button type="submit" id="submit-button" class="submit-button">Search</button>
-        </div>
-      </form>
+            ?>
+          </div>
+          <div class="form-group">
+            <label for="dateOption">Date Range:</label>
+            <select class="form-select" id="dateOption" name="dateOption">
+              <option value="0" selected>Past 7 Days</option>
+              <option value="1">Past 30 Days</option>
+              <option value="2">All Time</option>
+            </select>
+          </div>
+          <div class="submit-row">
+            <button type="submit" id="submit-button" class="submit-button">Search</button>
+          </div>
+        </form>
       </div>
     </div>
-
   </div>
 
+  <!-- Javascript -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
   <script>
-
+    // Get Modals & Buttons
     const modal = document.getElementById("ViewMatchModal");
     const modal2 = document.getElementById("SearchMatchesModal");
     const closeBtn = document.getElementsByClassName("close")[0];
@@ -208,25 +204,20 @@ $categories = $controller2 -> getHoCategories($homeownerID);
       modal2.style.display = "none";
     }
 
+    // Display Modal
     function viewMatch(category, cleanerName, serviceDate) {
-
       const viewModal = document.getElementById("ViewMatchModal");
       document.getElementById('viewCleanerName').value = cleanerName;
       document.getElementById('viewCategory').value = category;
       document.getElementById('viewDate').value = serviceDate;
-
       viewModal.style.display = "block";
-
     }
 
+    // Display Search Modal
     function displaySearchModal() {
-
       const searchModal = document.getElementById("SearchMatchesModal");
       searchModal.style.display = "block";
-
     }
-
   </script>
-
 </body>
 </html>

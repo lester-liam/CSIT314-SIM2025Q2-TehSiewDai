@@ -12,7 +12,7 @@ if (
     exit();
 }
 
-// Check if UserProfile is Valid
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Platform Management") {
     header("Location: login.php");
     exit();
@@ -46,7 +46,7 @@ if ($_SESSION['userProfile'] != "Platform Management") {
     </div>
   </div>
 
-  <!-- Create Form -->
+  <!-- Form -->
   <div class="form-container">
     <h2>Create Service Category</h2>
     <br>

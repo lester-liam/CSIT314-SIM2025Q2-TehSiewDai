@@ -5,7 +5,7 @@ require_once "/var/www/html/entity/Shortlist.php";
 $scriptRanSuccess = true;
 $shortlist = new Shortlist();
 
-
+// Generate Random IDs to be Shortlsted 
 function randomShortlists(): array {
     $shortlistedIDs = array();
 
@@ -20,8 +20,28 @@ function randomShortlists(): array {
     return $shortlistedIDs;
 }
 
-
+// Add Randomly
 for ($x = 70; $x <= 108; $x++) {
+    $data = randomShortlists();
+    foreach ($data as $s) {
+        $status = $shortlist->newShortlist(
+            $x,
+            $s,
+        );
+
+        if ($status) {
+            echo "Inserted Shortlist Successfully\n";
+        } else {
+            $scriptRanSuccess = false;
+            echo "Inserted Shortlist Unsuccessful\n";
+            error_log("Error inserting shortlist");
+            continue;
+        }
+    }
+}
+
+// Add for Demo Users
+for ($x = 6; $x <= 8; $x++) {
     $data = randomShortlists();
     foreach ($data as $s) {
         $status = $shortlist->newShortlist(

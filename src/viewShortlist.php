@@ -1,55 +1,53 @@
 <?php
 
-// Start the session (if not already started)
 session_start();
 
-// Include the controller
 require_once 'controllers/ViewAllShortlistController.php';
 require_once 'controllers/SearchShortlistController.php';
 
-// Ensure User is Logged In
-if (!isset($_SESSION['id']) && !isset($_SESSION['username']) && !isset($_SESSION['userProfile'])) {
-    header("Location: login.php");
-    exit();
+// User is Logged In
+if (
+  !isset($_SESSION['id']) &&
+  !isset($_SESSION['username']) &&
+  !isset($_SESSION['userProfile'])
+) {
+  header("Location: login.php");
+  exit();
 }
 
-// Ensure User is Cleaner
+// UserProfile is Valid
 if ($_SESSION['userProfile'] != "Homeowner") {
-     header("Location: login.php");
-     exit();
+  header("Location: login.php");
+  exit();
 }
 
-$homeownerID = (int) $_SESSION['id']; // Cleaner ID
+$homeownerID = (int) $_SESSION['id']; // Homeowner ID
 
-// Retrieve all Cleaner Services with Controller
-$controller = new ViewAllShortlistController();
-
-// Get all user accounts
-$shortlist = $controller->viewAllShortlist($homeownerID);
-
+// Check if GET['id'] Parameter Exists
 if (isset($_GET['q'])) {
-
   if ($_GET['q'] != '') {
+    // Remove Quotes, URL Decode, Trim Consecutive/Trailing Whitespaces
+    $searchTerm = str_replace(['"', "'"], '', $_GET['q']);
 
-    $controller = new SearchShortlistController();
+    // URL Decode
+    $searchTerm = urldecode($searchTerm);
 
-    // Remove Quotes & Decode URL (Eg. %20 for Whitespaces)
-    $searchTermWithoutQuotes = str_replace(['"', "'"], '', $_GET['q']);
-    $searchTerm = urldecode($searchTermWithoutQuotes);
-
-    // Remove 2 or more consecutive whitespaces
+    // Trim Consecutive/Trailing Whitespaces
     $searchTerm = preg_replace('/\s{2,}/', ' ', $searchTerm);
-
-    // Remove trailing whitespaces
     $searchTerm = ltrim($searchTerm);
     $searchTerm = rtrim($searchTerm);
 
+    // Search Shortlist
+    $controller = new SearchShortlistController();
     $shortlist = $controller->searchShortlist($homeownerID, $searchTerm);
-
   }
+} else {
+    // Get All Shortlist
+    $controller = new ViewAllShortlistController();
+    $shortlist = $controller->viewAllShortlist($homeownerID);
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,17 +55,12 @@ if (isset($_GET['q'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Services</title>
-
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/modal.css">
   <link rel="stylesheet" href="css/columnCard.css">
-
-
-
 </head>
 
 <body>
-
   <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-left">
@@ -81,10 +74,8 @@ if (isset($_GET['q'])) {
       <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>
     </div>
   </div>
-
   <!-- Headline -->
   <h1>Service Offerings</h1>
-
   <div class="section-container">
     <div class="search">
       <div class="search-group">
@@ -95,15 +86,15 @@ if (isset($_GET['q'])) {
         <button onclick='searchBtnClicked()' class="search-button">Search</button>
       </div>
     </div>
-
     <?php
 
       $counter = 0; // Initialize Counter to 0
       foreach ($shortlist as $cs) {
+          // Create a Row of Column Cards
           if ($counter % 4 === 0) {
               echo '<div class="row">';
           }
-
+          // Create Column & Card
           echo '<div class="column">';
           echo '  <div class="card">';
           echo '    <h3>' . htmlspecialchars(($cs->getServiceName())) . '</h3>';
@@ -114,27 +105,25 @@ if (isset($_GET['q'])) {
                                         htmlspecialchars($cs->getServiceID()) . ');"' .
                                         ' class="submit-button">View</button>';
           echo '  </div>';
-          echo '</div>';
+          echo '</div>'; // Close Column & Card
 
-          $counter = $counter + 1;
+          $counter = $counter + 1; // Increment Counter
 
           if ($counter % 4 === 0) {
-              echo '</div>';
+              echo '</div>'; // Close Outer Row Div
           }
       }
 
-      // Close the last row if the number of items is not a multiple of 4
+      // Close Last Row (When n items is not a multiple of 4)
       if ($counter % 4 !== 0) {
           echo '</div>';
       }
-
       ?>
     </div>
 
-    <!-- The Modal -->
+    <!-- Modal -->
     <div id="ViewServiceModal" class="modal">
-
-      <!-- Modal content -->
+      <!-- Modal Content -->
       <div class="modal-content">
         <div class="modal-header">
           <h2>Service Info</h2>
@@ -160,15 +149,15 @@ if (isset($_GET['q'])) {
         </div>
       </div>
     </div>
-
   </div>
 
+  <!-- Javascript -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
   <script>
-
+    // Search Button Clicked
     function searchBtnClicked() {
+      // Get Search Input
       var searchTermInput = document.getElementById("search_term");
       var searchTerm = searchTermInput.value;
 
@@ -176,6 +165,7 @@ if (isset($_GET['q'])) {
       searchTerm = searchTerm.replace(/[^a-zA-Z0-9\s]+/g, '');
       searchTerm = searchTerm.replace(/\s+/g, ' ');
 
+      // Update URL to include GET['q'] Parameter
       window.location.href = 'viewShortlist.php?q="' + searchTerm + '"';
     }
 
@@ -187,12 +177,12 @@ if (isset($_GET['q'])) {
       modal.style.display = "none";
     }
 
+    // Display Modal
     function viewService(homeownerID, serviceID) {
-
       // Modal
       const CleanerServiceModal = document.getElementById("ViewServiceModal");
       console.log(`./controllers/ViewShortlistController.php?homeownerID=${homeownerID}&serviceID=${serviceID}`);
-      // Use fetch API (modern approach) or XMLHttpRequest (older approach)
+      // Fetch Shortlist Info
       fetch(`./controllers/ViewShortlistController.php?homeownerID=${homeownerID}&serviceID=${serviceID}`) // Replace with your PHP script URL
         .then(response => response.json())
         .then(data => {

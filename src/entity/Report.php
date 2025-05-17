@@ -4,13 +4,17 @@ require_once('Database.php');
 
 class Report
 {
-    protected string $date;
-    protected string $category;
-    protected string $numNewService;
-    protected string $numUpdatedService;
-    protected string $totalViews;
-    protected float $totalShortlists;
+    protected string $date;                 // Report Date
+    protected string $category;             // Service Category
+    protected string $numNewService;        // Number of New Services
+    protected string $numUpdatedService;    // Number of Updated Services
+    protected string $totalViews;           // Total View Count
+    protected float $totalShortlists;       // Total Shortlist Count
 
+    /**
+     * Select Daily Report from DailyReportView
+     * @return ?array Array of Daily Report Records
+     */
     public function getDailyReport(): ?array
     {
         // New DB Conn
@@ -33,7 +37,6 @@ class Report
             } else {
                 return null;
             }
-
         } catch (PDOException $e) {
             error_log("Database insert failed: " . $e->getMessage());
             unset($db_handle);
@@ -41,6 +44,10 @@ class Report
         }
     }
 
+    /**
+     * Select Weekly Report from DailyReportView
+     * @return ?array Array of Weeky Report Records
+     */
     public function getWeekyReport(): ?array
     {
         // New DB Conn
@@ -59,7 +66,7 @@ class Report
                     CASE
                         WHEN date IS NOT NULL THEN SUBSTRING(date, 7) + 0
                         ELSE NULL
-                    END, category;";
+                    END DESC, category;";
             $stmt = $db_conn->prepare($sql);
             $execResult = $stmt->execute();
             unset($db_handle); // Disconnect DB Conn
@@ -79,6 +86,10 @@ class Report
         }
     }
 
+    /**
+     * Select Monthly Report from DailyReportView
+     * @return ?array Array of Weeky Report Records
+     */
     public function getMonthlyReport(): ?array
     {
         // New DB Conn
@@ -110,27 +121,33 @@ class Report
     }
 
     // Accessor Methods
-    public function getDate(): string {
+    public function getDate(): string
+    {
         return $this->date;
     }
 
-    public function getCategory(): string {
-    return $this->category;
+    public function getCategory(): string
+    {
+        return $this->category;
     }
 
-    public function getNumNewService(): string {
-    return $this->numNewService;
+    public function getNumNewService(): string
+    {
+        return $this->numNewService;
     }
 
-    public function getNumUpdatedService(): string {
-    return $this->numUpdatedService;
+    public function getNumUpdatedService(): string
+    {
+        return $this->numUpdatedService;
     }
 
-    public function getTotalViews(): string {
-    return $this->totalViews;
+    public function getTotalViews(): string
+    {
+        return $this->totalViews;
     }
 
-    public function getTotalShortlists(): float {
-    return $this->totalShortlists;
+    public function getTotalShortlists(): float
+    {
+        return $this->totalShortlists;
     }
 }

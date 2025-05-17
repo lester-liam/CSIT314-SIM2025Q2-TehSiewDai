@@ -35,6 +35,7 @@ while (count($uniqueStrings) < 100) {
 
 $scriptRanSuccess = true;
 $serviceCategory = new ServiceCategory();
+// Loop Through Each Word & Create New Service Category
 foreach ($uniqueStrings as $w) {
     $status = $serviceCategory->createServiceCategory($w, "Lorem ipsum dolor sit amet");
 

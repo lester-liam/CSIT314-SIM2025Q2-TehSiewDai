@@ -118,7 +118,8 @@ if (isset($_GET['id'])) {
       // Category Validation (Trimmed Field must be non-empty)
       const category = document.getElementById("category").value.trim();
       if (!category) {
-        document.getElementById("categoryValidation").innerText = "Category cannot be empty.";
+        document.getElementById("categoryValidation").innerText =
+          "Category cannot be empty.";
         isValid = false;
       } else {
         document.getElementById("categoryValidation").innerText = "";
