@@ -9,7 +9,7 @@ class Report
     protected string $numNewService;        // Number of New Services
     protected string $numUpdatedService;    // Number of Updated Services
     protected string $totalViews;           // Total View Count
-    protected float $totalShortlists;       // Total Shortlist Count
+    protected string $totalShortlists;      // Total Shortlist Count
 
     /**
      * Select Daily Report from DailyReportView
@@ -146,7 +146,7 @@ class Report
         return $this->totalViews;
     }
 
-    public function getTotalShortlists(): float
+    public function getTotalShortlists(): string
     {
         return $this->totalShortlists;
     }
