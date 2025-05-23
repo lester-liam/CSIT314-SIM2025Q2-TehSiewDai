@@ -1,0 +1,5 @@
+title: CSIT314-SIM2025Q2
+description: C2C Freelance Home Cleaners Service Web Platform built using PHP, this repository is part of a group project for CSIT314-Software Development Methodology
+remote_theme: pages-themes/modernist@v0.2.0
+plugins:
+- jekyll-remote-theme
