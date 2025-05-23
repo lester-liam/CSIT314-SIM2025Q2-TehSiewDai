@@ -134,7 +134,7 @@ if (isset($_GET['id'])) {
 
       // Prompt Confirmation & Submit Form
       if (isValid) {
-        if (confirm("Confirm Create Service Category?")) {
+        if (confirm("Confirm Update Service Category?")) {
           form.submit();
         }
       }
