@@ -6,7 +6,7 @@
 
 ![collage-showcase.jpg](https://i.ibb.co/60ygHbcG/collage-showcase.jpg>)
 
-This project is part of CSIT314 - Software Development Methody Module, it aims to
+This project is part of CSIT314 - Software Development Methodology Module, it aims to
 develop a system for C2C Freelance Home Cleaners Service that acts as a platform
 to connect freelance home cleaners with homeowners. The service will support various
 key features and functionalities such as:
