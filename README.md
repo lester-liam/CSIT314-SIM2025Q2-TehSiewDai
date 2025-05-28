@@ -26,7 +26,7 @@ key features and functionalities such as:
 * Dinglin 8222782
 
 ### Explore Our Documentation/Showcase
-* [Documents/Showcase Video](https://docs.google.com/document/d/1QD3kkQlSZlbpLJABsi_e2Dk3EjVsRq1cdDz0Y2VuYxM/edit?usp=sharing)
+* [Documents/Showcase Video](https://drive.google.com/drive/folders/1XQ2wRRZ2a9Y5EryjK-nFDuvKQNulYaf7?usp=sharing)
 
 ## Project Structure
 The repository is organized as follows:
