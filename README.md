@@ -23,7 +23,7 @@ key features and functionalities such as:
 * Jinghan Wu (8246580)
 * Koh Yong Shen Alois (7893449)
 * Andre Matthew Lau Jun Jie (7026304)
-* Dinglin 8222782
+* Dinglin (8222782)
 
 ### Explore Our Documentation/Showcase
 * [Documents/Showcase Video](https://drive.google.com/drive/folders/1XQ2wRRZ2a9Y5EryjK-nFDuvKQNulYaf7?usp=sharing)
